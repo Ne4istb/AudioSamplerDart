@@ -1,0 +1,6 @@
+name: AudioSampler
+author: ne4istb
+version: 0.0.1
+description: Audio sampler written on Dart
+dependencies:
+  browser: any
