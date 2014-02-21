@@ -1,29 +1,41 @@
-import 'dart:html';
+import 'package:angular/angular.dart';
 import 'dart:web_audio';
 import 'dart:async';
+import 'dart:html';
 
-void main(){
-  querySelector('#playButton').onClick.listen(play);
+@MirrorsUsed(override: '*')
+import 'dart:mirrors';
+
+void main() {
+  ngBootstrap(module: new Module()
+    ..type(AudioSamplerController));
 }
 
-void play(Event e){
+@NgController(
+    selector: '[audioSampler]',
+    publishAs: 'ctrl')
+class AudioSamplerController {
+  AudioSamplerController();
   
-  var snare = new Sample('samples/snare.ogg');
-  var guitar = new Sample('samples/guitar.ogg');
-  var money = new Sample('samples/money.ogg');
+  void play(){
     
-  var audioTrack = new AudioTrack();
-  
-  audioTrack.addSample(guitar, 0);
-  
-  audioTrack.addSample(money, 2);
-  audioTrack.addSample(money, 6);
-  
-  for (var i=4; i<12; i++){
-    audioTrack.addSample(snare, i + 0.1);
+    var snare = new Sample('samples/snare.ogg');
+    var guitar = new Sample('samples/guitar.ogg');
+    var money = new Sample('samples/money.ogg');
+    
+    var audioTrack = new AudioTrack();
+    
+    audioTrack.addSample(guitar, 0);
+    
+    audioTrack.addSample(money, 2);
+    audioTrack.addSample(money, 6);
+    
+    for (var i=4; i<12; i++){
+      audioTrack.addSample(snare, i + 0.1);
+    }
+    
+    audioTrack.play();  
   }
-  
-  audioTrack.play();  
 }
 
 class Sample{
@@ -91,15 +103,14 @@ class AudioTrack{
    
   void play(){
     Timer timer = new Timer(new Duration(seconds: 1), (){
-      for (var pattern in _patterns)
-        playPattern(pattern);
+      _patterns.forEach(playPattern);
     });
   }
   
   void playPattern(AudioPattern pattern){
-    var source = _audioContext.createBufferSource();
-    source.buffer = pattern.sample.buffer;
-    source.connectNode(_audioContext.destination);
-    source.start(pattern.startTime);
+    _audioContext.createBufferSource()
+        ..buffer = pattern.sample.buffer
+        ..connectNode(_audioContext.destination)
+        ..start(pattern.startTime);
   }
 }
