@@ -1,4 +1,6 @@
 import 'package:angular/angular.dart';
+import 'trackLine/trackLine.dart';
+
 import 'dart:web_audio';
 import 'dart:async';
 import 'dart:html';
@@ -8,7 +10,8 @@ import 'dart:mirrors';
 
 void main() {
   ngBootstrap(module: new Module()
-    ..type(AudioSamplerController));
+    ..type(AudioSamplerController)
+    ..type(TrackLineComponent));
 }
 
 @NgController(
@@ -19,19 +22,32 @@ class AudioSamplerController {
   
   void play(){
     
-    var snare = new Sample('samples/snare.ogg');
+    var beat = new Sample('samples/beat.ogg');
     var guitar = new Sample('samples/guitar.ogg');
-    var money = new Sample('samples/money.ogg');
+    var jungle = new Sample('samples/jungle.ogg');
+    var bass = new Sample('samples/bass.ogg');
     
     var audioTrack = new AudioTrack();
     
     audioTrack.addSample(guitar, 0);
     
-    audioTrack.addSample(money, 2);
-    audioTrack.addSample(money, 6);
+    var sampleDuration = 5.3;
     
-    for (var i=4; i<12; i++){
-      audioTrack.addSample(snare, i + 0.1);
+    for (var i = 0; i<7; i++){
+      audioTrack.addSample(guitar, i*sampleDuration);
+    }
+
+    audioTrack.addSample(jungle, 2*sampleDuration);
+    audioTrack.addSample(jungle, 5*sampleDuration);
+    audioTrack.addSample(jungle, 6*sampleDuration);
+    
+    audioTrack.addSample(bass, 1*sampleDuration);
+    audioTrack.addSample(bass, 2*sampleDuration);
+    audioTrack.addSample(bass, 5*sampleDuration);
+    audioTrack.addSample(bass, 6*sampleDuration);
+
+    for (var i = 3; i<7; i++){
+      audioTrack.addSample(beat, i*sampleDuration);
     }
     
     audioTrack.play();  
@@ -43,18 +59,22 @@ class Sample{
   String _fileName;
   AudioBuffer _buffer;
   
+  bool isLoading = false;
+  
   Sample (this._fileName);
  
   void load(AudioContext context){
     
-    if (_buffer !=null)
+    if (isLoading || _buffer !=null)
       return;
+
+    isLoading = true;
     
     new HttpRequest()
       ..open('GET', _fileName, async: true)
       ..responseType = 'arraybuffer'
       ..onLoad.listen((e) => _onLoad(e, context))
-      ..onError.listen((e) => print("BufferLoader: XHR error"))
+      ..onError.listen(_onLoadError)
       ..send();
   }
   
@@ -67,10 +87,16 @@ class Sample{
           print("Error decoding file data: $_fileName");
           return;
         }
-          
+        print(_fileName + " - " + buffer.duration.toString());  
         _buffer = buffer;
       })
-      .catchError((error) => print("Error: $error"));
+      .catchError((error) => print("Error: $error"))
+      .whenComplete(() {isLoading == false;});
+  }
+  
+  void _onLoadError (Event e){
+    print("BufferLoader: XHR error");
+    isLoading == false;
   }
   
   AudioBuffer get buffer => _buffer; 

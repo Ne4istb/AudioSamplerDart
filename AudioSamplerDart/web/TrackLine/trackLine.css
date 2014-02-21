@@ -1,0 +1,14 @@
+.line{
+    border-radius: 0.2em;
+    border: 3px outset green;
+    margin-bottom: 2px;
+}
+
+.label{
+    width:  100px;
+    border-right: 3px solid green;
+}
+
+.workspace{
+    width:  100%;
+}
