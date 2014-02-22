@@ -20,11 +20,14 @@
 .cell{
     background-color: #D1CCCC;
     float:left;
-    width: 50px;
+    width: 51px;
     height: 20px;
     border-right: 1px solid grey;
     margin-top:-5px;
 }
 
 .sample-in-track{
+    float:left;
+    margin-top:-5px!important;
+    margin-left:-5px!important;
 }

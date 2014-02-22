@@ -4,6 +4,7 @@ import 'sample/sample.dart';
 
 import 'dart:web_audio';
 import 'dart:async';
+import 'dart:html';
 
 @MirrorsUsed(override: '*')
 import 'dart:mirrors';
@@ -20,26 +21,47 @@ void main() {
     publishAs: 'ctrl')
 class AudioSamplerController {
   
-  AudioContext _audioContext;
+  List<List<TrackLineCell>> trackLines = [];
   
   AudioSamplerController(){
-    _audioContext=new AudioContext();
+    
+    for (var i=0; i<5; i++){
+      var value = new List<TrackLineCell>.filled(15, new TrackLineCell());
+      trackLines.add(value);
+    }
+  }
+  
+  void drag(MouseEvent e){
+    print(e.currentTarget);
+  }
+  
+  void drop(MouseEvent e){
+    print('dragover ' + e.currentTarget.toString());
+  }
+  
+  void allowDrop(MouseEvent e){
+    e.preventDefault();
+    print('dragover ' + e.currentTarget.toString());
   }
   
   void play(){
-   
-    var audioTrack = new AudioTrack(_audioContext);
+
+    AudioContext audioContext=new AudioContext();
+    var audioTrack = new AudioTrack(audioContext);
   
     var sampleDuration = 5.3;
-
-    trackLines.add(guitarLine);
-    trackLines.add(beatLine);
-    trackLines.add(jungleLine);
-    trackLines.add(bassLine);
+//
+//    trackLines.add(guitarLine);
+//    trackLines.add(beatLine);
+//    trackLines.add(jungleLine);
+//    trackLines.add(bassLine);
     
     trackLines.forEach((trackLine){
+      
       for (var i=0; i<trackLine.length; i++){
+        
         String href = trackLine[i].href;
+        
         if(href != null && href.isNotEmpty){
           audioTrack.addSample(new Sample(href), i*sampleDuration);
         }
@@ -49,49 +71,45 @@ class AudioSamplerController {
     audioTrack.play();  
   }
   
-  AudioContext get audioContext => _audioContext;
-  
-  List<List<TrackLineCell>> trackLines = [];
-  
-  List<TrackLineCell> guitarLine = [
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg')
-  ];
-  
-  List<TrackLineCell> beatLine = [
-    new TrackLineCell(),
-    new TrackLineCell(),
-    new TrackLineCell(),
-    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
-    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
-    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
-    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg')
-  ];
-  
-  List<TrackLineCell> bassLine = [
-    new TrackLineCell(),
-    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
-    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
-    new TrackLineCell(),
-    new TrackLineCell(),
-    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
-    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg')
-  ];
-  
-  List<TrackLineCell> jungleLine = [
-    new TrackLineCell(),
-    new TrackLineCell(),
-    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg'),
-    new TrackLineCell(),
-    new TrackLineCell(),
-    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg'),
-    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg')
-  ];
+//  List<TrackLineCell> guitarLine = [
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
+//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg')
+//  ];
+//  
+//  List<TrackLineCell> beatLine = [
+//    new TrackLineCell(),
+//    new TrackLineCell(),
+//    new TrackLineCell(),
+//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
+//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
+//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
+//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg')
+//  ];
+//  
+//  List<TrackLineCell> bassLine = [
+//    new TrackLineCell(),
+//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
+//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
+//    new TrackLineCell(),
+//    new TrackLineCell(),
+//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
+//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg')
+//  ];
+//  
+//  List<TrackLineCell> jungleLine = [
+//    new TrackLineCell(),
+//    new TrackLineCell(),
+//    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg'),
+//    new TrackLineCell(),
+//    new TrackLineCell(),
+//    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg'),
+//    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg')
+//  ];
 }
 
 class AudioPattern{
@@ -115,6 +133,10 @@ class AudioTrack{
       ..startTime = startTime; 
     
     _patterns.add(pattern);
+  }
+  
+  void clear(){
+    _patterns.clear();
   }
    
   void play(){

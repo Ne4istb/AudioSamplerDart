@@ -3,8 +3,8 @@ author: ne4istb
 version: 0.0.1
 description: Audio sampler written on Dart
 dependencies:
-  angular: 0.9.6
-  shadow_dom: any
+  angular: any
   browser: any
-  unittest: any
   js: any
+  shadow_dom: any
+  unittest: any

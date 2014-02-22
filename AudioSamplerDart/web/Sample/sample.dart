@@ -23,12 +23,12 @@ class SampleComponent {
     _audioContext = new AudioContext();
   }
   
-  Sample _sample;
-  
-  void drag(Event e){
-    print(e);
+  void drag(MouseEvent e){
+    e.dataTransfer.setData("SampleName", name);
+    e.dataTransfer.setData("SampleHref", href);
   }
   
+  Sample _sample;
   void playSample(){
     
     if (_sample == null){
