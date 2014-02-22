@@ -16,6 +16,7 @@
     height: 10px;
     padding: 5px;
 }
+
 .cell{
     background-color: #D1CCCC;
     float:left;
@@ -23,4 +24,7 @@
     height: 20px;
     border-right: 1px solid grey;
     margin-top:-5px;
+}
+
+.sample-in-track{
 }

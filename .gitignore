@@ -2,3 +2,6 @@ build
 packages
 *.lock
 packages
+*.js
+*.deps
+*.map

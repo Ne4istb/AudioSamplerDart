@@ -13,4 +13,14 @@ class TrackLineComponent {
   String number;
   
   String get label => "Track " + number;
+  
+  @NgTwoWay('cells')
+  List<TrackLineCell> cells;
+}
+
+class TrackLineCell{
+  String sampleName;
+  String href;
+  
+  TrackLineCell({this.sampleName, this.href});
 }

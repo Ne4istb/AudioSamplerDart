@@ -26,7 +26,7 @@ class SampleComponent {
   Sample _sample;
   
   void drag(Event e){
-    print('drag');
+    print(e);
   }
   
   void playSample(){
