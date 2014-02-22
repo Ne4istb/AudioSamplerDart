@@ -1,0 +1,10 @@
+.audioSampler{
+  background-color: #D1CCCC;
+}
+
+.samplesContainer{
+  min-height: 50px;
+  border: 2px dashed blue;
+  margin-bottom: 10px;
+  padding: 5px;
+}

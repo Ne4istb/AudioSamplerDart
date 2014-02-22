@@ -1,9 +1,9 @@
 import 'package:angular/angular.dart';
 import 'trackLine/trackLine.dart';
+import 'sample/sample.dart';
 
 import 'dart:web_audio';
 import 'dart:async';
-import 'dart:html';
 
 @MirrorsUsed(override: '*')
 import 'dart:mirrors';
@@ -11,14 +11,20 @@ import 'dart:mirrors';
 void main() {
   ngBootstrap(module: new Module()
     ..type(AudioSamplerController)
-    ..type(TrackLineComponent));
+    ..type(TrackLineComponent)
+    ..type(SampleComponent));
 }
 
 @NgController(
     selector: '[audioSampler]',
     publishAs: 'ctrl')
 class AudioSamplerController {
-  AudioSamplerController();
+  
+  AudioContext _audioContext;
+  
+  AudioSamplerController(){
+    _audioContext=new AudioContext();
+  }
   
   void play(){
     
@@ -27,7 +33,7 @@ class AudioSamplerController {
     var jungle = new Sample('samples/jungle.ogg');
     var bass = new Sample('samples/bass.ogg');
     
-    var audioTrack = new AudioTrack();
+    var audioTrack = new AudioTrack(_audioContext);
     
     audioTrack.addSample(guitar, 0);
     
@@ -52,54 +58,8 @@ class AudioSamplerController {
     
     audioTrack.play();  
   }
-}
-
-class Sample{
   
-  String _fileName;
-  AudioBuffer _buffer;
-  
-  bool isLoading = false;
-  
-  Sample (this._fileName);
- 
-  void load(AudioContext context){
-    
-    if (isLoading || _buffer !=null)
-      return;
-
-    isLoading = true;
-    
-    new HttpRequest()
-      ..open('GET', _fileName, async: true)
-      ..responseType = 'arraybuffer'
-      ..onLoad.listen((e) => _onLoad(e, context))
-      ..onError.listen(_onLoadError)
-      ..send();
-  }
-  
-  void _onLoad (Event e, AudioContext context){
-    context
-      .decodeAudioData((e.target as HttpRequest).response)
-      .then((AudioBuffer buffer){
-
-        if (buffer == null) {
-          print("Error decoding file data: $_fileName");
-          return;
-        }
-        print(_fileName + " - " + buffer.duration.toString());  
-        _buffer = buffer;
-      })
-      .catchError((error) => print("Error: $error"))
-      .whenComplete(() {isLoading == false;});
-  }
-  
-  void _onLoadError (Event e){
-    print("BufferLoader: XHR error");
-    isLoading == false;
-  }
-  
-  AudioBuffer get buffer => _buffer; 
+  AudioContext get audioContext => _audioContext;
 }
 
 class AudioPattern{
@@ -112,9 +72,7 @@ class AudioTrack{
   AudioContext _audioContext;
   List<AudioPattern> _patterns = [];
   
-  AudioTrack(){
-    _audioContext = new AudioContext();
-  }
+  AudioTrack(this._audioContext);
   
   void addSample(Sample sample, num startTime){
     
@@ -134,9 +92,6 @@ class AudioTrack{
   }
   
   void playPattern(AudioPattern pattern){
-    _audioContext.createBufferSource()
-        ..buffer = pattern.sample.buffer
-        ..connectNode(_audioContext.destination)
-        ..start(pattern.startTime);
+    pattern.sample.play(_audioContext, startTime: pattern.startTime);
   }
 }

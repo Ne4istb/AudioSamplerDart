@@ -1,0 +1,14 @@
+.sample{
+  background-color: #CBA610;
+  float:left;
+  margin: 5px;
+  height: 20px;
+  min-width: 50px;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  
+  &:hover{
+    border: 1px dashed grey;
+  }
+}

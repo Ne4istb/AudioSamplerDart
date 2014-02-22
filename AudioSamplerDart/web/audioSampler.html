@@ -6,9 +6,17 @@
     <link rel="stylesheet" href="audioSampler.css">
   </head>
  
-  <body audioSampler>   
-    <p id="text"></p>
+  <body audioSampler class="audioSampler">   
+    <p id="text">Select a sample:</p>
    
+    <div class="samplesContainer">
+      <sample name="Beat" href="samples/beat.ogg" audioContext="ctrl.audioContext"></sample>
+      <sample name="Guitar" href="samples/guitar.ogg"></sample>
+      <sample name="Jungle" href="samples/jungle.ogg"></sample>
+      <sample name="Bass" href="samples/bass.ogg"></sample>
+    </div>
+     
+     <br>
      
     <track number="1"></track>
     <track number="2"></track>
@@ -16,6 +24,7 @@
     <track number="4"></track>
     <track number="5"></track>
 
+    <br>
     <button ng-click="ctrl.play()">Play me!</button>
     <script src="packages/shadow_dom/shadow_dom.min.js"></script>
     <script type="application/dart" src="audioSampler.dart"></script>
