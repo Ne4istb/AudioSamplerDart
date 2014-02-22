@@ -17,6 +17,9 @@ class SampleComponent {
   
   @NgAttr('href')
   String href;
+  
+  @NgCallback('onItemDragged')
+  var onItemDragged;
 
   AudioContext _audioContext;
   SampleComponent(){
@@ -24,8 +27,12 @@ class SampleComponent {
   }
   
   void drag(MouseEvent e){
-    e.dataTransfer.setData("SampleName", name);
-    e.dataTransfer.setData("SampleHref", href);
+    e.dataTransfer.setData('SampleName', name);
+    e.dataTransfer.setData('SampleHref', href);    
+  }
+  
+  void dragEnd(MouseEvent e){
+    onItemDragged();
   }
   
   Sample _sample;

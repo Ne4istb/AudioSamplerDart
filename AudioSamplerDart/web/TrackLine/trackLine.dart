@@ -29,6 +29,10 @@ class TrackLineComponent {
   void allowDrop(MouseEvent e){
     e.preventDefault();
   }
+  
+  void onItemDragged(int index){
+    cells[index] = new TrackLineCell();
+  }
 }
 
 class TrackLineCell{

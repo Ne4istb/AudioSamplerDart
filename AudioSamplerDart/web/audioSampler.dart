@@ -33,6 +33,7 @@ class AudioSamplerController {
   }
   
   void drag(MouseEvent e){
+    e.dataTransfer.setData('Source', 'Container');
     print(e.currentTarget);
   }
   
@@ -42,7 +43,6 @@ class AudioSamplerController {
   
   void allowDrop(MouseEvent e){
     e.preventDefault();
-    print('dragover ' + e.currentTarget.toString());
   }
   
   void play(){
