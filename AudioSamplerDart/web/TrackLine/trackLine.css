@@ -1,23 +1,26 @@
 .line{
     border-radius: 0.2em;
-    border: 3px outset green;
+    border: 3px inset #B9B91D;
     margin-bottom: 2px;
 }
 
 .label{
     float:left;
-    border-right: 2px solid green;
-    padding: 5px;
+    border-right: 2px solid #B9B91D;
+    padding-right: 5px;
+    padding-left: 5px;
+    background-color: #58AF3C ;
 }
 
 .workspace{
-    height: 20px;
+    height: 10px;
     padding: 5px;
 }
 .cell{
+    background-color: #D1CCCC;
     float:left;
     width: 50px;
-    height: 30px;
+    height: 20px;
     border-right: 1px solid grey;
     margin-top:-5px;
 }
