@@ -5,6 +5,7 @@ import 'sample/sample.dart';
 import 'dart:web_audio';
 import 'dart:async';
 import 'dart:html';
+import 'dart:collection';
 
 @MirrorsUsed(override: '*')
 import 'dart:mirrors';
@@ -63,7 +64,7 @@ class AudioSamplerController {
         String href = trackLine[i].href;
         
         if(href != null && href.isNotEmpty){
-          audioTrack.addSample(new Sample(href), i*sampleDuration);
+          audioTrack.addSample(href, i*sampleDuration);
         }
       };
     });
@@ -121,10 +122,16 @@ class AudioTrack{
   
   AudioContext _audioContext;
   List<AudioPattern> _patterns = [];
+  Map<String, Sample> cachedSamples = new Map<String, Sample>();
   
   AudioTrack(this._audioContext);
   
-  void addSample(Sample sample, num startTime){
+  void addSample(String href, num startTime){
+    
+    if (!cachedSamples.containsKey(href))
+      cachedSamples[href] = new Sample(href);
+    
+    Sample sample = cachedSamples[href];
     
     sample.load(_audioContext);
     
@@ -134,11 +141,7 @@ class AudioTrack{
     
     _patterns.add(pattern);
   }
-  
-  void clear(){
-    _patterns.clear();
-  }
-   
+
   void play(){
     Timer timer = new Timer(new Duration(seconds: 1), (){
       _patterns.forEach(playPattern);
