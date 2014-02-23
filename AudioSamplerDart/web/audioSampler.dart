@@ -22,12 +22,18 @@ class AudioSamplerController {
   
   List<List<TrackLineCell>> trackLines = [];
   
-  AudioSamplerController(){
+  void resetTrack(){
+
+    trackLines.clear();
     
     for (var i=0; i<5; i++){
       var value = new List<TrackLineCell>.filled(15, new TrackLineCell());
       trackLines.add(value);
-    }
+    }             
+  }
+  
+  AudioSamplerController(){
+    resetTrack();
   }
   
   num _sampleDuration = 5.3;
@@ -60,6 +66,16 @@ class AudioSamplerController {
       audioTrack.play();
       playing = true;
     });
+    
+    void resetAll(){
+      
+      trackLines.clear();
+      
+      for (var i=0; i<5; i++){
+        var value = new List<TrackLineCell>.filled(15, new TrackLineCell());
+        trackLines.add(value);
+      }             
+    }
   }
   
   var samples = [
