@@ -4,6 +4,7 @@
       ng-dragstart="cmp.drag($event)" 
       ng-dragend="cmp.dragEnd($event)" 
       ng-doubleclick="cmp.playSample()"
-      ng-contextmenu="cmp.onContextMenu($event)">
-{{cmp.name}}
+      ng-contextmenu="cmp.onContextMenu($event)"
+      style="background: linear-gradient(to top, {{cmp.getColors()}});">
+      {{cmp.name}}
 </div>

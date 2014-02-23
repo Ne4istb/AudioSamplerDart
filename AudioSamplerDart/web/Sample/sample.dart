@@ -59,6 +59,22 @@ class SampleComponent {
       _sample.play(_audioContext);
     });
   }
+  
+  String getColors(){
+    if (href.contains("beat"))
+      return '#3F3EE5, #3E93E5';
+    
+    if (href.contains("key"))
+      return '#97218D, #D86FCF';
+    
+    if (href.contains("guitar"))
+      return '#E5983E, #DBAC75';
+    
+    if (href.contains("bass"))
+      return '#2B4C20, #4F9C35';
+    
+    return '#CBA610, #D4BD5E';
+  }
 }
 
 class Sample{
