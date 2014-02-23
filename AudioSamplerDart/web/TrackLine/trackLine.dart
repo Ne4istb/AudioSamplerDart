@@ -2,6 +2,7 @@ library trackLine;
 
 import 'package:angular/angular.dart';
 import 'dart:html';
+import 'dart:convert' show JSON;
 
 @NgComponent(
     selector: 'track',
@@ -53,7 +54,7 @@ class TrackLineComponent {
   }
 }
 
-class TrackLineCell{
+class TrackLineCell {
   
   String sampleName;
   String href;
@@ -61,4 +62,14 @@ class TrackLineCell{
   TrackLineCell({this.sampleName, this.href});
   
   bool get isEmpty => (sampleName == null || sampleName.isEmpty) && (href == null || href.isEmpty);  
+  
+  TrackLineCell.fromJSON(String jsonString) {
+    Map storedTrackLine = JSON.decode(jsonString);
+    sampleName = storedTrackLine['n'] == "null" ? '' : storedTrackLine['n'];
+    href = storedTrackLine['h'] == "null" ? '' : storedTrackLine['h'];
+  }
+
+  String toJson(){
+    return  '{ "n": "$sampleName", "h": "$href" } '; 
+  }
 }

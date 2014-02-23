@@ -4,6 +4,8 @@ import 'sample/sample.dart';
 
 import 'dart:web_audio';
 import 'dart:async';
+import 'dart:html';
+import 'dart:convert' show JSON;
 
 @MirrorsUsed(override: '*')
 import 'dart:mirrors';
@@ -20,7 +22,69 @@ void main() {
     publishAs: 'ctrl')
 class AudioSamplerController {
   
+  final String TRACK_KEY = 'trackMix';
+  final num SAMPLE_DURATION = 5.3;
+  
   List<List<TrackLineCell>> trackLines = [];
+
+  AudioSamplerController(){
+    initTrack();
+  }
+  
+  void initTrack(){
+    String storedTrack = window.localStorage[TRACK_KEY];
+    if (storedTrack == null)
+      resetTrack();
+    else
+      restoreTrack(storedTrack);
+  }
+  
+  
+  bool playing = false;
+  void play(){
+
+    playing = false;
+    
+    AudioContext audioContext=new AudioContext();
+    var audioTrack = new AudioTrack(audioContext);
+
+    trackLines.forEach((trackLine){
+      
+      for (var i=0; i<trackLine.length; i++){
+        
+        String href = trackLine[i].href;
+        
+        if(href != null && href.isNotEmpty){
+          audioTrack.addSample(href, i*SAMPLE_DURATION);
+        }
+      };
+    });
+    
+    Timer timer = new Timer(new Duration(seconds: 1), (){
+      audioTrack.play();
+      playing = true;
+    });
+  }
+  
+  void save(){
+    
+    String json = JSON.encode(trackLines, toEncodable: (pattern){
+      return (pattern as TrackLineCell).toJson();
+    });
+    
+    window.localStorage[TRACK_KEY] = json; 
+  }
+  
+  void restoreTrack(String json){
+    
+    trackLines = JSON.decode(json, reviver: (key, value){
+      
+      if (value is String)
+        return new TrackLineCell.fromJSON(value);
+      else
+        return value;
+    });
+  }
   
   void resetTrack(){
 
@@ -30,52 +94,6 @@ class AudioSamplerController {
       var value = new List<TrackLineCell>.filled(15, new TrackLineCell());
       trackLines.add(value);
     }             
-  }
-  
-  AudioSamplerController(){
-    resetTrack();
-  }
-  
-  num _sampleDuration = 5.3;
-  bool playing = false;
-  void play(){
-
-    playing = false;
-    
-    AudioContext audioContext=new AudioContext();
-    var audioTrack = new AudioTrack(audioContext);
-//
-//    trackLines.add(guitarLine);
-//    trackLines.add(beatLine);
-//    trackLines.add(jungleLine);
-//    trackLines.add(bassLine);
-    
-    trackLines.forEach((trackLine){
-      
-      for (var i=0; i<trackLine.length; i++){
-        
-        String href = trackLine[i].href;
-        
-        if(href != null && href.isNotEmpty){
-          audioTrack.addSample(href, i*_sampleDuration);
-        }
-      };
-    });
-    
-    Timer timer = new Timer(new Duration(seconds: 1), (){
-      audioTrack.play();
-      playing = true;
-    });
-    
-    void resetAll(){
-      
-      trackLines.clear();
-      
-      for (var i=0; i<5; i++){
-        var value = new List<TrackLineCell>.filled(15, new TrackLineCell());
-        trackLines.add(value);
-      }             
-    }
   }
   
   var samples = [
@@ -133,46 +151,6 @@ class AudioSamplerController {
     { 'name' : 'Effect 09', 'href' : 'samples/fx09.ogg'},
     { 'name' : 'Effect 10', 'href' : 'samples/fx10.ogg'}
   ];
-  
-//  List<TrackLineCell> guitarLine = [
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg'),
-//    new TrackLineCell(sampleName: 'Guitar', href: 'samples/guitar.ogg')
-//  ];
-//  
-//  List<TrackLineCell> beatLine = [
-//    new TrackLineCell(),
-//    new TrackLineCell(),
-//    new TrackLineCell(),
-//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
-//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
-//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg'),
-//    new TrackLineCell(sampleName: 'Beat', href: 'samples/beat.ogg')
-//  ];
-//  
-//  List<TrackLineCell> bassLine = [
-//    new TrackLineCell(),
-//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
-//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
-//    new TrackLineCell(),
-//    new TrackLineCell(),
-//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg'),
-//    new TrackLineCell(sampleName: 'Bass', href: 'samples/bass.ogg')
-//  ];
-//  
-//  List<TrackLineCell> jungleLine = [
-//    new TrackLineCell(),
-//    new TrackLineCell(),
-//    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg'),
-//    new TrackLineCell(),
-//    new TrackLineCell(),
-//    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg'),
-//    new TrackLineCell(sampleName: 'Jungle', href: 'samples/jungle.ogg')
-//  ];
 }
 
 class AudioPattern{
