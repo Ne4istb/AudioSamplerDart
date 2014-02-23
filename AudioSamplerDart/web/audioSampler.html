@@ -10,10 +10,9 @@
     <p id="text">Select a sample:</p>
    
     <div class="samplesContainer">
-      <sample name="Beat" href="samples/beat.ogg"></sample>
-      <sample name="Guitar" href="samples/guitar.ogg"></sample>
-      <sample name="Jungle" href="samples/jungle.ogg"></sample>
-      <sample name="Bass" href="samples/bass.ogg"></sample>
+      <div ng-repeat="sample in ctrl.samples">
+        <sample name="{{sample.name}}" href="{{sample.href}}"></sample>
+      </div>
     </div>
      
     <br>

@@ -2,13 +2,16 @@
     border-radius: 0.2em;
     border: 3px inset #B9B91D;
     margin-bottom: 2px;
+    height: 30px;
 }
 
 .label{
     float:left;
+    height: 27px;
     border-right: 2px solid #B9B91D;
     padding-right: 5px;
     padding-left: 5px;
+    padding-top: 5px;
     background-color: #58AF3C ;
 }
 
@@ -20,8 +23,8 @@
 .cell{
     background-color: #D1CCCC;
     float:left;
-    width: 51px;
-    height: 20px;
+    width: 70px;
+    height: 30px;
     border-right: 1px solid grey;
     margin-top:-5px;
 }

@@ -3,8 +3,10 @@
 }
 
 .samplesContainer{
+  display: inline-block;
   background-color: #D1CCCC ;
   min-height: 50px;
+  width: 99%;
   border: 2px solid black;
   margin-bottom: 10px;
   padding: 5px;

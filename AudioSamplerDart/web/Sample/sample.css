@@ -2,12 +2,15 @@
   background-color: #CBA610;
   float:left;
   margin: 5px;
-  height: 20px;
-  width: 50px;
+  height: 25px;
+  width: 70px;
   text-align: center;
+  padding-top: 5px;
   cursor: pointer;
 }
 
 .sample:hover{
     border: 1px dashed black;
+    width: 68px;
+    height: 23px;
 }
