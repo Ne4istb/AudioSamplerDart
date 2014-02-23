@@ -11,3 +11,24 @@
   margin-bottom: 10px;
   padding: 5px;
 }
+
+.progressCursor{
+    border: 1px solid black;
+    height: 200px;
+    width: 0px;
+    margin-top: -5px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 5; 
+    position:absolute;
+    left: 70px;
+}
+
+.progress-cursor-in-progress{
+     -webkit-animation: rightThenLeft 79.5s linear;
+}
+
+@-webkit-keyframes rightThenLeft {
+    0%   {left: 70px;}
+    100% {left: 1135px;}
+}

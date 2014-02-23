@@ -30,12 +30,14 @@ class AudioSamplerController {
     }
   }
   
+  num _sampleDuration = 5.3;
+  bool playing = false;
   void play(){
 
+    playing = false;
+    
     AudioContext audioContext=new AudioContext();
     var audioTrack = new AudioTrack(audioContext);
-  
-    var sampleDuration = 5.3;
 //
 //    trackLines.add(guitarLine);
 //    trackLines.add(beatLine);
@@ -49,12 +51,15 @@ class AudioSamplerController {
         String href = trackLine[i].href;
         
         if(href != null && href.isNotEmpty){
-          audioTrack.addSample(href, i*sampleDuration);
+          audioTrack.addSample(href, i*_sampleDuration);
         }
       };
     });
     
-    audioTrack.play();  
+    Timer timer = new Timer(new Duration(seconds: 1), (){
+      audioTrack.play();
+      playing = true;
+    });
   }
   
   var samples = [
@@ -184,9 +189,7 @@ class AudioTrack{
   }
 
   void play(){
-    Timer timer = new Timer(new Duration(seconds: 1), (){
-      _patterns.forEach(playPattern);
-    });
+    _patterns.forEach(playPattern);
   }
   
   void playPattern(AudioPattern pattern){
