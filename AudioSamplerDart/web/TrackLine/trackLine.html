@@ -4,10 +4,12 @@
         <div ng-repeat="cell in cmp.cells track by $index">
           <div class="cell" ng-dragover="cmp.allowDrop($event)" ng-drop="cmp.drop($event, $index)">
             <sample class="sample-in-track" 
+                    id="sample_{{cmp.number}}_{{$index}}"
                     ng-if="cell.sampleName.isNotEmpty" 
                     name="{{cell.sampleName}}" 
                     href="{{cell.href}}"
-                    onItemDragged="cmp.onItemDragged($index)"></sample>
+                    onItemDragged="cmp.onItemDragged($index)"
+                    onRightClick="cmp.clearCell($index)"></sample>
           </div>
            
         </div>

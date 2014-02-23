@@ -12,6 +12,9 @@ import 'dart:async';
     publishAs: 'cmp'
 )
 class SampleComponent {
+  @NgAttr('id')
+  String id;
+  
   @NgAttr('name')
   String name;
   
@@ -20,6 +23,9 @@ class SampleComponent {
   
   @NgCallback('onItemDragged')
   var onItemDragged;
+  
+  @NgCallback('onRightClick')
+  var onRightClick;
 
   AudioContext _audioContext;
   SampleComponent(){
@@ -27,12 +33,18 @@ class SampleComponent {
   }
   
   void drag(MouseEvent e){
+    e.dataTransfer.setData('id', (e.currentTarget as Element).id);
     e.dataTransfer.setData('SampleName', name);
-    e.dataTransfer.setData('SampleHref', href);    
+    e.dataTransfer.setData('SampleHref', href);
   }
   
   void dragEnd(MouseEvent e){
     onItemDragged();
+  }
+  
+  void onContextMenu (Event e){
+    onRightClick();
+    e.preventDefault();
   }
   
   Sample _sample;
