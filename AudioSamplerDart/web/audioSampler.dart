@@ -55,7 +55,7 @@ class AudioSamplerController {
         String href = trackLine[i].href;
         
         if(href != null && href.isNotEmpty){
-          audioTrack.addSample(href, i*SAMPLE_DURATION);
+          audioTrack.addSample(new Sample(href), i*SAMPLE_DURATION);
         }
       };
     });
@@ -162,17 +162,11 @@ class AudioTrack{
   
   AudioContext _audioContext;
   List<AudioPattern> _patterns = [];
-  Map<String, Sample> cachedSamples = new Map<String, Sample>();
   
   AudioTrack(this._audioContext);
   
-  void addSample(String href, num startTime){
-    
-    if (!cachedSamples.containsKey(href))
-      cachedSamples[href] = new Sample(href);
-    
-    Sample sample = cachedSamples[href];
-    
+  void addSample(Sample sample, num startTime){
+
     sample.load(_audioContext);
     
     AudioPattern pattern = new AudioPattern()

@@ -83,8 +83,24 @@ class Sample{
   AudioBuffer _buffer;
   
   bool isLoading = false;
-  
-  Sample (this._fileName);
+
+  static Map<String, Sample> _cache;
+
+  factory Sample(String fileName) {
+    if (_cache == null) {
+      _cache = {};
+    }
+
+    if (_cache.containsKey(fileName)) {
+      return _cache[fileName];
+    } else {
+      final sample = new Sample._internal(fileName);
+      _cache[fileName] = sample;
+      return sample;
+    }
+  }
+
+  Sample._internal(this._fileName);
  
   void load(AudioContext context){
     
