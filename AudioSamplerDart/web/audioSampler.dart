@@ -1,6 +1,7 @@
 import 'package:angular/angular.dart';
 import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
+import 'audioTrackService.dart';
 
 import 'dart:web_audio';
 import 'dart:async';
@@ -14,7 +15,8 @@ void main() {
   ngBootstrap(module: new Module()
     ..type(AudioSamplerController)
     ..type(TrackLineComponent)
-    ..type(SampleComponent));
+    ..type(SampleComponent)
+    ..type(AudioTrackService));
 }
 
 @NgController(
@@ -25,20 +27,17 @@ class AudioSamplerController {
   final String TRACK_KEY = 'trackMix';
   final num SAMPLE_DURATION = 5.3;
   
+  AudioTrackService _audioTrackService;
+  
   List<List<TrackLineCell>> trackLines = [];
 
-  AudioSamplerController(){
-    initTrack();
-  }
-  
-  void initTrack(){
+  AudioSamplerController(AudioTrackService audioTrackService){
     
-    String storedTrack = window.localStorage[TRACK_KEY];
+    _audioTrackService = audioTrackService;
     
-    if (storedTrack == null)
-      resetTrack();
-    else
-      restoreTrack(storedTrack);
+    _audioTrackService.loadData('2')
+      .then(restoreTrack)
+      .catchError((_) => resetTrack());
   }
   
   bool playing = false;
@@ -65,24 +64,28 @@ class AudioSamplerController {
   }
   
   void save(){
+   
+    Map data = new Map();
+    data['_id'] = '2';
+    data['data'] = trackLines;
     
-    String json = JSON.encode(trackLines, toEncodable: (pattern){
+    String json = JSON.encode(data, toEncodable: (pattern){
       return (pattern as TrackLineCell).toJson();
     });
     
-    print(json);
-    window.localStorage[TRACK_KEY] = json; 
+    _audioTrackService.saveData(json);
   }
-  
+
   void restoreTrack(String json){
     
-    trackLines = JSON.decode(json, reviver: (key, value){
-      
-      if (value is String)
-        return new TrackLineCell.fromJSON(value);
+     Map result = JSON.decode(json, reviver: (key, value){
+       if(key != '_id' && value is String)
+         return new TrackLineCell.fromJSON(value);
       else
         return value;
     });
+     
+    trackLines = result['data'];
   }
   
   void resetTrack(){
