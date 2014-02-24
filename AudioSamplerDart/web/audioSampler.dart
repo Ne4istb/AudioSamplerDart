@@ -32,13 +32,14 @@ class AudioSamplerController {
   }
   
   void initTrack(){
+    
     String storedTrack = window.localStorage[TRACK_KEY];
+    
     if (storedTrack == null)
       resetTrack();
     else
       restoreTrack(storedTrack);
   }
-  
   
   bool playing = false;
   void play(){
@@ -50,12 +51,9 @@ class AudioSamplerController {
 
     trackLines.forEach((trackLine){
       
-      for (var i=0; i<trackLine.length; i++){
-        
-        String href = trackLine[i].href;
-        
-        if(href != null && href.isNotEmpty){
-          audioTrack.addSample(new Sample(href), i*SAMPLE_DURATION);
+      for (var i=0; i<trackLine.length; i++){       
+        if(trackLine[i] !=null){
+          audioTrack.addSample(new Sample(trackLine[i].href), i*SAMPLE_DURATION);
         }
       };
     });
@@ -72,6 +70,7 @@ class AudioSamplerController {
       return (pattern as TrackLineCell).toJson();
     });
     
+    print(json);
     window.localStorage[TRACK_KEY] = json; 
   }
   
@@ -91,7 +90,7 @@ class AudioSamplerController {
     trackLines.clear();
     
     for (var i=0; i<5; i++){
-      var value = new List<TrackLineCell>.filled(15, new TrackLineCell());
+      var value = new List<TrackLineCell>.filled(15, null);
       trackLines.add(value);
     }             
   }

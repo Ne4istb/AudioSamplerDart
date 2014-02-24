@@ -22,7 +22,7 @@ class TrackLineComponent {
   bool _clearCellAllowed = false;
   void drop(MouseEvent e, int index){
     
-    if (!cells[index].isEmpty)
+    if (cells[index] != null)
       return;
     
     String id = e.dataTransfer.getData('Id');
@@ -32,7 +32,7 @@ class TrackLineComponent {
     String sampleName = e.dataTransfer.getData('SampleName');
     String sampleHref = e.dataTransfer.getData('SampleHref');
     
-    cells[index]= new TrackLineCell(sampleName: sampleName, href: sampleHref);
+    cells[index]= new TrackLineCell(sampleName, sampleHref);
   }
   
   bool _ctrlPressed;
@@ -50,7 +50,7 @@ class TrackLineComponent {
   }
   
   void clearCell(int index){
-    cells[index] = new TrackLineCell();
+    cells[index] = null;
   }
 }
 
@@ -59,10 +59,8 @@ class TrackLineCell {
   String sampleName;
   String href;
   
-  TrackLineCell({this.sampleName, this.href});
-  
-  bool get isEmpty => (sampleName == null || sampleName.isEmpty) && (href == null || href.isEmpty);  
-  
+  TrackLineCell(this.sampleName, this.href);
+
   TrackLineCell.fromJSON(String jsonString) {
     Map storedTrackLine = JSON.decode(jsonString);
     sampleName = storedTrackLine['n'] == "null" ? '' : storedTrackLine['n'];

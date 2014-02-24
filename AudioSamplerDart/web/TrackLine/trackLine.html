@@ -5,7 +5,7 @@
           <div class="cell" ng-dragover="cmp.allowDrop($event)" ng-drop="cmp.drop($event, $index)">
             <sample class="sample-in-track" 
                     id="sample_{{cmp.number}}_{{$index}}"
-                    ng-if="cell.sampleName.isNotEmpty" 
+                    ng-if="cell!=null" 
                     name="{{cell.sampleName}}" 
                     href="{{cell.href}}"
                     onItemDragged="cmp.onItemDragged($index)"
