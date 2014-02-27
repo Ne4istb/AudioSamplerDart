@@ -5,7 +5,6 @@ import 'audioTrackService.dart';
 
 import 'dart:web_audio';
 import 'dart:async';
-import 'dart:html';
 import 'dart:convert' show JSON;
 
 @MirrorsUsed(override: '*')
@@ -31,13 +30,10 @@ class AudioSamplerController {
   
   List<List<TrackLineCell>> trackLines = [];
 
-  AudioSamplerController(AudioTrackService audioTrackService){
-    
-    _audioTrackService = audioTrackService;
-    
+  AudioSamplerController(this._audioTrackService){
     _audioTrackService.loadData('2')
       .then(restoreTrack)
-      .catchError((_) => resetTrack());
+      .catchError((e) => resetTrack(e));
   }
   
   bool playing = false;
@@ -76,20 +72,24 @@ class AudioSamplerController {
     _audioTrackService.saveData(json);
   }
 
-  void restoreTrack(String json){
+  void restoreTrack(Map json){
     
-     Map result = JSON.decode(json, reviver: (key, value){
-       if(key != '_id' && value is String)
-         return new TrackLineCell.fromJSON(value);
-      else
-        return value;
+    trackLines.clear();
+    
+    (json['data'] as List).forEach((trackline){
+      List value = [];
+      (trackline as List).forEach((cell){
+          value.add(cell == null ? null : new TrackLineCell.fromJSON(cell));  
+      });
+      
+      trackLines.add(value);
     });
-     
-    trackLines = result['data'];
   }
   
-  void resetTrack(){
-
+  void resetTrack(Error e){
+    
+    print('Error:'+ e.toString());
+    
     trackLines.clear();
     
     for (var i=0; i<5; i++){
