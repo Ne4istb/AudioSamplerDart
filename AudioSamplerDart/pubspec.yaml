@@ -8,3 +8,4 @@ dependencies:
   js: any
   shadow_dom: any
   unittest: any
+  uuid: any

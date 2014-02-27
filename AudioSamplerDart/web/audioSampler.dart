@@ -2,9 +2,11 @@ import 'package:angular/angular.dart';
 import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'audioTrackService.dart';
+import 'package:uuid/uuid.dart';
 
 import 'dart:web_audio';
 import 'dart:async';
+import 'dart:html';
 import 'dart:convert' show JSON;
 
 @MirrorsUsed(override: '*')
@@ -23,17 +25,28 @@ void main() {
     publishAs: 'ctrl')
 class AudioSamplerController {
   
-  final String TRACK_KEY = 'trackMix';
+  final String CLIENT_ID = 'clientId';
   final num SAMPLE_DURATION = 5.3;
+
   
   AudioTrackService _audioTrackService;
   
   List<List<TrackLineCell>> trackLines = [];
-
+  String _id;
+  
   AudioSamplerController(this._audioTrackService){
-    _audioTrackService.loadData('2')
+    
+    _id = _getClientId();
+
+    _audioTrackService.loadData(window.location.pathname)
       .then(restoreTrack)
-      .catchError((e) => resetTrack(e));
+      .catchError((_) => resetTrack());
+
+  }
+  
+  String _getClientId(){
+    String id = window.localStorage[CLIENT_ID];
+    return id == null ? new UuidBase().v1() : id;
   }
   
   bool playing = false;
@@ -61,16 +74,35 @@ class AudioSamplerController {
   
   void save(){
    
-    Map data = new Map();
-    data['_id'] = '2';
-    data['data'] = trackLines;
+    var trackId = _getTrackId();
     
+    Map data = new Map()
+      ..['_id'] = trackId
+      ..['data'] = trackLines;
+      
     String json = JSON.encode(data, toEncodable: (pattern){
       return (pattern as TrackLineCell).toJson();
-    });
+    });  
     
-    _audioTrackService.saveData(json);
+    window.localStorage[CLIENT_ID] = _id;
+    
+    _audioTrackService.saveData(json)
+      .then((_) {  window.location.replace(trackId); });
   }
+  
+  String _getTrackId(){
+    
+    var path = window.location.pathname;
+    
+    if (path.isEmpty || path.substring(0, 8) != _id || '/AudioSamplerDart/web/audioSampler.html'){
+      path = _generateTrackId();
+      print(path);
+    } 
+        
+    return path;    
+  }
+
+  String _generateTrackId() => _id.hashCode.toString() + new UuidBase().v1().hashCode.toString();
 
   void restoreTrack(Map json){
     
@@ -86,9 +118,7 @@ class AudioSamplerController {
     });
   }
   
-  void resetTrack(Error e){
-    
-    print('Error:'+ e.toString());
+  void resetTrack(){
     
     trackLines.clear();
     
