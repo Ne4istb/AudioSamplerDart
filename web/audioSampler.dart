@@ -1,6 +1,6 @@
 import 'package:angular/angular.dart';
-import 'TrackLine/trackLine.dart';
-import 'Sample/sample.dart';
+import 'trackLine/trackLine.dart';
+import 'sample/sample.dart';
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
 
