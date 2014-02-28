@@ -59,18 +59,21 @@ class AudioSamplerController {
   
   final String CLIENT_ID = 'clientId';
   final num SAMPLE_DURATION = 5.3;
-
   
   AudioTrackService _audioTrackService;
   
   List<List<TrackLineCell>> trackLines = [];
+  
   String _id;
+  String _trackOwner;
   
   AudioSamplerController(this._audioTrackService){
     
     _id = _getClientId();
 
-    _audioTrackService.loadData(window.location.pathname)
+    var trackId = window.location.pathname.split('#')[1];
+    
+    _audioTrackService.loadData(trackId)
       .then(restoreTrack)
       .catchError((_) => resetTrack());
 
@@ -110,6 +113,7 @@ class AudioSamplerController {
     
     Map data = new Map()
       ..['_id'] = trackId
+      ..['owner'] = _id
       ..['data'] = trackLines;
       
     String json = JSON.encode(data, toEncodable: (pattern){
@@ -119,24 +123,25 @@ class AudioSamplerController {
     window.localStorage[CLIENT_ID] = _id;
     
     _audioTrackService.saveData(json)
-      .then((_) {  window.location.replace(trackId); });
+      .then((_) {  
+        window.location.replace('$window.location.pathname#$trackId'); 
+      });
   }
   
   String _getTrackId(){
     
     var path = window.location.pathname;
+    if (path.contains('#') && _trackOwner == _id)
+      return path.split('#')[1];
     
-    if (path.isEmpty || path.substring(0, 8) != _id || path == '/AudioSamplerDart/web/audioSampler.html'){
-      path = _generateTrackId();
-      print(path);
-    } 
-        
-    return path;    
+    return _generateTrackId();
   }
 
-  String _generateTrackId() => _id.hashCode.toString() + new UuidBase().v1().hashCode.toString();
+  String _generateTrackId() => new UuidBase().v1().hashCode.toString();
 
   void restoreTrack(Map json){
+    
+    _trackOwner = json['owner'];
     
     trackLines.clear();
     
