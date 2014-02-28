@@ -29,10 +29,10 @@ class TrackLineComponent {
     if (id != (e.currentTarget as Element).id)
       _clearCellAllowed = true;
     
-    String sampleName = e.dataTransfer.getData('SampleName');
+    String sampleName2 = e.dataTransfer.getData('SampleName');
     String sampleHref = e.dataTransfer.getData('SampleHref');
     
-    cells[index]= new TrackLineCell(sampleName, sampleHref);
+    cells[index]= new TrackLineCell(sampleName2, sampleHref);
   }
   
   bool _ctrlPressed;

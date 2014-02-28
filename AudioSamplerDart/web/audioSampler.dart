@@ -1,6 +1,6 @@
 import 'package:angular/angular.dart';
-import 'trackLine/trackLine.dart';
-import 'sample/sample.dart';
+import 'TrackLine/trackLine.dart';
+import 'Sample/sample.dart';
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
 
@@ -8,9 +8,41 @@ import 'dart:web_audio';
 import 'dart:async';
 import 'dart:html';
 import 'dart:convert' show JSON;
-
+/*
 @MirrorsUsed(override: '*')
 import 'dart:mirrors';
+*/
+@MirrorsUsed(
+targets: const [
+    'angular.core',
+    'angular.core.dom',
+    'angular.core.parser',
+    'angular.core.zone',
+    NodeTreeSanitizer,
+    DynamicParser,
+    DynamicParserBackend,
+    Injector,
+    'trackLine',
+    'sample'
+],
+metaTargets: const [
+    NgInjectableService,
+    NgComponent,
+    NgDirective,
+    NgController,
+    NgAttr,
+    NgOneWay,
+    NgOneWayOneTime,
+    NgTwoWay,
+    NgCallback,
+    NgZone,
+    TrackLineCell,
+    Sample
+],
+override: '*'
+)
+import 'dart:mirrors';
+
 
 void main() {
   ngBootstrap(module: new Module()
@@ -94,7 +126,7 @@ class AudioSamplerController {
     
     var path = window.location.pathname;
     
-    if (path.isEmpty || path.substring(0, 8) != _id || '/AudioSamplerDart/web/audioSampler.html'){
+    if (path.isEmpty || path.substring(0, 8) != _id || path == '/AudioSamplerDart/web/audioSampler.html'){
       path = _generateTrackId();
       print(path);
     } 
