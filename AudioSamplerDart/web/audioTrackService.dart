@@ -15,7 +15,7 @@ class AudioTrackService {
 
   Future<Map> loadData(String id) {
     var url = '$URL/$id$API_KEY';
-    return _http.get(url).then((response) {return response.data; });
+    return _http.get(url).then((response) { return response.data; });
   }
     
   Future saveData(String json) {

@@ -67,23 +67,34 @@ class AudioSamplerController {
   String _id;
   String _trackOwner;
   
-  AudioSamplerController(this._audioTrackService){
-    
+  AudioSamplerController(this._audioTrackService){ 
     _id = _getClientId();
-
-    var trackId = window.location.pathname.split('#')[1];
-    
-    _audioTrackService.loadData(trackId)
-      .then(restoreTrack)
-      .catchError((_) => resetTrack());
-
+    _initTrackLines();
   }
   
   String _getClientId(){
     String id = window.localStorage[CLIENT_ID];
     return id == null ? new UuidBase().v1() : id;
   }
-  
+
+  void _initTrackLines() {
+    
+    var path = window.location.href;
+    
+    if (path.contains('#'))
+    {
+      var trackId = path.split('#')[1];
+      
+      _audioTrackService.loadData(trackId)
+        .then(restoreTrack)
+        .catchError((_) => resetTrack());
+    }
+    else
+    {
+       resetTrack();   
+    }
+  }
+
   bool playing = false;
   void play(){
 
@@ -118,19 +129,19 @@ class AudioSamplerController {
       
     String json = JSON.encode(data, toEncodable: (pattern){
       return (pattern as TrackLineCell).toJson();
-    });  
+    });
     
     window.localStorage[CLIENT_ID] = _id;
     
     _audioTrackService.saveData(json)
       .then((_) {  
-        window.location.replace('$window.location.pathname#$trackId'); 
+        window.location.replace(window.location.pathname + '#$trackId'); 
       });
   }
   
   String _getTrackId(){
     
-    var path = window.location.pathname;
+    var path = window.location.href;
     if (path.contains('#') && _trackOwner == _id)
       return path.split('#')[1];
     
