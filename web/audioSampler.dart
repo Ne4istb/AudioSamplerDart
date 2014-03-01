@@ -3,6 +3,7 @@ import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
+import 'singleAudioContext.dart';
 
 import 'dart:async';
 import 'dart:html';
@@ -14,14 +15,12 @@ targets: const [
     'angular.core.dom',
     'angular.core.parser',
     'angular.core.zone',
-    'dart.dom.web_audio',
     NodeTreeSanitizer,
     DynamicParser,
     DynamicParserBackend,
     Injector,
     'trackLine',
-    'sample',
-    'singleAudioContext'
+    'sample'
 ],
 metaTargets: const [
     NgInjectableService,
@@ -35,9 +34,7 @@ metaTargets: const [
     NgCallback,
     NgZone,
     TrackLineCell,
-    Sample,
-    SingleAudioContext,
-    AudioBufferSourceNode
+    Sample
 ],
 override: '*'
 )
@@ -112,10 +109,11 @@ class AudioSamplerController {
       };
     });
     
-    Timer timer = new Timer(new Duration(seconds: 1), (){
-      audioTrack.play();
+    audioTrack.onPlay.listen((_){
       playing = true;
     });
+    
+    audioTrack.play();
   }
   
   void stop(){
@@ -253,14 +251,13 @@ class AudioPattern{
 
 class AudioTrack{
   
+  StreamController _playController = new StreamController.broadcast();
   List<AudioPattern> _patterns = [];
   
   AudioTrack();
   
   void addSample(Sample sample, num startTime){
 
-    sample.load();
-    
     AudioPattern pattern = new AudioPattern()
       ..sample = sample
       ..startTime = startTime; 
@@ -269,10 +266,22 @@ class AudioTrack{
   }
 
   void play(){
-    _patterns.forEach(playPattern);
+    
+    new Timer(new Duration(milliseconds:100), (){
+
+      if (_patterns.any((pattern) => !pattern.sample.loaded))
+        play();
+      else 
+        _play();
+    });
   }
   
-  void playPattern(AudioPattern pattern){
-    pattern.sample.play(startTime: pattern.startTime);
+  void _play(){
+    _patterns.forEach(_playPattern); 
+    _playController.add("playing");
   }
+  
+  void _playPattern(AudioPattern pattern)=> pattern.sample.play(startTime: pattern.startTime);
+  
+  Stream get onPlay => _playController.stream;
 }
