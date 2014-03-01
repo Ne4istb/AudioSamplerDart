@@ -51,15 +51,17 @@ class SampleComponent {
   Sample _sample;
   void playSample(){
     
-    if (_sample == null){
-      _sample = new Sample(href)..load();
-    }
-    
     new SingleAudioContext().stopAll();
     
-    Timer timer = new Timer(new Duration(milliseconds: 500), (){
-      _sample.play();
-    });
+      _sample = new Sample(href)
+        ..load();
+      _sample.postLoad(_sample.play);
+
+//    
+//    
+//    Timer timer = new Timer(new Duration(milliseconds: 500), (){
+//      _sample.play();
+//    });
   }
   
   String getColors(){
@@ -121,6 +123,11 @@ class Sample{
       ..send();
   }
   
+  Function _postLoad;
+  void postLoad(void f()){
+    _postLoad = f;
+  }
+  
   void _onLoad (Event e){
     
     SingleAudioContext context = new SingleAudioContext();
@@ -135,6 +142,9 @@ class Sample{
         }
         print(_fileName + " - " + buffer.duration.toString());  
         _buffer = buffer;
+        
+        Function.apply(_postLoad, []);
+        
       })
       .catchError((error) => print("Error: $error"))
       .whenComplete(() {isLoading == false;});
