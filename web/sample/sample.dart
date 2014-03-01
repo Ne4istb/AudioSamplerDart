@@ -48,9 +48,20 @@ class SampleComponent {
     e.preventDefault();
   }
   
-  void playSample(){ 
+  Sample _sample;
+  void playSample(){
+    
     new SingleAudioContext().stopAll();
-    Timer timer = new Timer(new Duration(milliseconds: 500), (){
+    
+      _sample = new Sample(href)
+        ..load();
+      _sample.postLoad(_sample.play);
+
+//    
+//    
+//    Timer timer = new Timer(new Duration(milliseconds: 500), (){
+//      _sample.play();
+//    });
   }
   
   String getColors(){
@@ -72,47 +83,56 @@ class SampleComponent {
 
 class Sample{
   
-  SingleAudioContext _context = new SingleAudioContext();
-  StreamController _loadedController = new StreamController.broadcast();
-
   String _fileName;
-  
   AudioBuffer _buffer;
-  bool get loaded => _buffer != null;
+  
+  bool isLoading = false;
 
   static Map<String, Sample> _cache;
 
   factory Sample(String fileName) {
-
-    if (_cache == null) 
+    if (_cache == null) {
       _cache = {};
+    }
 
-    if (_cache.containsKey(fileName))
+    if (_cache.containsKey(fileName)) {
       return _cache[fileName];
-    
-    final sample = new Sample._internal(fileName);
-    _cache[fileName] = sample;
-    
-    return sample;
+    } else {
+      final sample = new Sample._internal(fileName);
+      _cache[fileName] = sample;
+      return sample;
+    }
   }
 
-  Sample._internal(this._fileName){
-    _load();
-  }
+  Sample._internal(this._fileName);
+ 
+  void load(){
+    
+    SingleAudioContext context = new SingleAudioContext();
+    
+    if (isLoading || _buffer !=null)
+      return;
 
-  void _load(){  
+    isLoading = true;
     
     new HttpRequest()
       ..open('GET', _fileName, async: true)
       ..responseType = 'arraybuffer'
-      ..onLoad.listen(_onLoadSuccess)
+      ..onLoad.listen((e) => _onLoad(e))
       ..onError.listen(_onLoadError)
       ..send();
   }
-
-  void _onLoadSuccess (Event e){
-
-    _context
+  
+  Function _postLoad;
+  void postLoad(void f()){
+    _postLoad = f;
+  }
+  
+  void _onLoad (Event e){
+    
+    SingleAudioContext context = new SingleAudioContext();
+    
+    context
       .decodeAudioData((e.target as HttpRequest).response)
       .then((AudioBuffer buffer){
 
@@ -120,25 +140,23 @@ class Sample{
           print("Error decoding file data: $_fileName");
           return;
         }
-        
         print(_fileName + " - " + buffer.duration.toString());  
         _buffer = buffer;
         
-        _loadedController.add("loaded");
+        Function.apply(_postLoad, []);
+        
       })
-      .catchError((error) => print("Error: $error"));
+      .catchError((error) => print("Error: $error"))
+      .whenComplete(() {isLoading == false;});
   }
   
-  void _onLoadError (Event e)=> print("BufferLoader: XHR error");
-  
-  void play({num startTime: 0}){ 
-       
-    if (_buffer == null){
-      _loadedController.stream.listen((_) {_play(startTime);});
-    }
-    else
-      _play(startTime);
+  void _onLoadError (Event e){
+    print("BufferLoader: XHR error");
+    isLoading == false;
   }
   
-  void _play(num startTime)=> _context.playFromBuffer(_buffer, startTime: startTime);
+  void play({num startTime: 0}){       
+    SingleAudioContext context = new SingleAudioContext();
+    context.playFromBuffer(_buffer, startTime: startTime);
+  }
 }
