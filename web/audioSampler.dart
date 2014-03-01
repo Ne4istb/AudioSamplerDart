@@ -3,6 +3,7 @@ import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
+import 'singleAudioContext.dart';
 
 import 'dart:async';
 import 'dart:html';
@@ -14,14 +15,12 @@ targets: const [
     'angular.core.dom',
     'angular.core.parser',
     'angular.core.zone',
-    'dart.dom.web_audio',
     NodeTreeSanitizer,
     DynamicParser,
     DynamicParserBackend,
     Injector,
     'trackLine',
-    'sample',
-    'singleAudioContext'
+    'sample'
 ],
 metaTargets: const [
     NgInjectableService,
@@ -35,9 +34,7 @@ metaTargets: const [
     NgCallback,
     NgZone,
     TrackLineCell,
-    Sample,
-    SingleAudioContext,
-    AudioBufferSourceNode
+    Sample
 ],
 override: '*'
 )

@@ -57,7 +57,7 @@ class SampleComponent {
     
     new SingleAudioContext().stopAll();
     
-    Timer timer = new Timer(new Duration(milliseconds: 250), (){
+    Timer timer = new Timer(new Duration(milliseconds: 500), (){
       _sample.play();
     });
   }
