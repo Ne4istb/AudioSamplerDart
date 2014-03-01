@@ -3,25 +3,14 @@ import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
+import 'singleAudioContext.dart';
 
-import 'dart:web_audio';
 import 'dart:async';
 import 'dart:html';
 import 'dart:convert' show JSON;
-/*
-@MirrorsUsed(override: '*')
-import 'dart:mirrors';
-*/
+
 @MirrorsUsed(
 targets: const [
-    'angular.core',
-    'angular.core.dom',
-    'angular.core.parser',
-    'angular.core.zone',
-    NodeTreeSanitizer,
-    DynamicParser,
-    DynamicParserBackend,
-    Injector,
     'trackLine',
     'sample'
 ],
@@ -98,10 +87,10 @@ class AudioSamplerController {
   bool playing = false;
   void play(){
 
+    new SingleAudioContext().stop();
     playing = false;
     
-    AudioContext audioContext=new AudioContext();
-    var audioTrack = new AudioTrack(audioContext);
+    var audioTrack = new AudioTrack();
 
     trackLines.forEach((trackLine){
       
@@ -117,6 +106,19 @@ class AudioSamplerController {
       playing = true;
     });
   }
+  
+  void stop(){
+    playing = false;
+    new SingleAudioContext().stop();
+  }
+//  
+//  void pause(){
+//    new SingleAudioContext().pause();
+//  }
+//  
+//  void resume(){
+//    new SingleAudioContext().resume();
+//  }
   
   void save(){
    
@@ -240,14 +242,13 @@ class AudioPattern{
 
 class AudioTrack{
   
-  AudioContext _audioContext;
   List<AudioPattern> _patterns = [];
   
-  AudioTrack(this._audioContext);
+  AudioTrack();
   
   void addSample(Sample sample, num startTime){
 
-    sample.load(_audioContext);
+    sample.load();
     
     AudioPattern pattern = new AudioPattern()
       ..sample = sample
@@ -261,6 +262,6 @@ class AudioTrack{
   }
   
   void playPattern(AudioPattern pattern){
-    pattern.sample.play(_audioContext, startTime: pattern.startTime);
+    pattern.sample.play(startTime: pattern.startTime);
   }
 }

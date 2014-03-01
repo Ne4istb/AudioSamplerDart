@@ -1,9 +1,10 @@
 library sample;
 
+import '../singleAudioContext.dart';
 import 'package:angular/angular.dart';
-import 'dart:web_audio';
 import 'dart:html';
 import 'dart:async';
+import 'dart:web_audio';
 
 @NgComponent(
     selector: 'sample',
@@ -27,9 +28,9 @@ class SampleComponent {
   @NgCallback('onRightClick')
   var onRightClick;
 
-  AudioContext _audioContext;
+  SingleAudioContext _audioContext;
   SampleComponent(){
-    _audioContext = new AudioContext();
+    _audioContext = new SingleAudioContext();
   }
   
   void drag(MouseEvent e){
@@ -51,12 +52,13 @@ class SampleComponent {
   void playSample(){
     
     if (_sample == null){
-      _sample = new Sample(href)
-        ..load(_audioContext);
+      _sample = new Sample(href)..load();
     }
-      
-    Timer timer = new Timer(new Duration(milliseconds: 500), (){
-      _sample.play(_audioContext);
+    
+    new SingleAudioContext().stop();
+    
+    Timer timer = new Timer(new Duration(milliseconds: 250), (){
+      _sample.play();
     });
   }
   
@@ -102,7 +104,9 @@ class Sample{
 
   Sample._internal(this._fileName);
  
-  void load(AudioContext context){
+  void load(){
+    
+    SingleAudioContext context = new SingleAudioContext();
     
     if (isLoading || _buffer !=null)
       return;
@@ -112,12 +116,15 @@ class Sample{
     new HttpRequest()
       ..open('GET', _fileName, async: true)
       ..responseType = 'arraybuffer'
-      ..onLoad.listen((e) => _onLoad(e, context))
+      ..onLoad.listen((e) => _onLoad(e))
       ..onError.listen(_onLoadError)
       ..send();
   }
   
-  void _onLoad (Event e, AudioContext context){
+  void _onLoad (Event e){
+    
+    SingleAudioContext context = new SingleAudioContext();
+    
     context
       .decodeAudioData((e.target as HttpRequest).response)
       .then((AudioBuffer buffer){
@@ -138,10 +145,8 @@ class Sample{
     isLoading == false;
   }
   
-  void play(AudioContext context, {num startTime: 0}){
-    context.createBufferSource()
-        ..buffer = _buffer
-        ..connectNode(context.destination)
-        ..start(startTime);
+  void play({num startTime: 0}){       
+    SingleAudioContext context = new SingleAudioContext();
+    context.playFromBuffer(_buffer, startTime: startTime);
   }
 }

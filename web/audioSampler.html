@@ -22,8 +22,9 @@
       <track number="{{$index + 1}}" cells="trackLine"></track>
     </div>
     
-    <br>
-    <button ng-click="ctrl.play()">Play me!</button>
+    <button ng-click="ctrl.play()" ng-hide="ctrl.playing">Play</button>
+    <button ng-click="ctrl.stop()">Stop</button>
+    
     <button ng-click="ctrl.resetTrack()">Reset all</button>
     <button ng-click="ctrl.save()">Save</button>
     <script src="packages/shadow_dom/shadow_dom.min.js"></script>
