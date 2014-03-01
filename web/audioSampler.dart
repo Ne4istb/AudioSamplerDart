@@ -3,7 +3,6 @@ import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
-import 'singleAudioContext.dart';
 
 import 'dart:async';
 import 'dart:html';
@@ -11,8 +10,18 @@ import 'dart:convert' show JSON;
 
 @MirrorsUsed(
 targets: const [
+    'angular.core',
+    'angular.core.dom',
+    'angular.core.parser',
+    'angular.core.zone',
+    'dart.dom.web_audio',
+    NodeTreeSanitizer,
+    DynamicParser,
+    DynamicParserBackend,
+    Injector,
     'trackLine',
-    'sample'
+    'sample',
+    'singleAudioContext'
 ],
 metaTargets: const [
     NgInjectableService,
@@ -26,7 +35,9 @@ metaTargets: const [
     NgCallback,
     NgZone,
     TrackLineCell,
-    Sample
+    Sample,
+    SingleAudioContext,
+    AudioBufferSourceNode
 ],
 override: '*'
 )
@@ -87,7 +98,7 @@ class AudioSamplerController {
   bool playing = false;
   void play(){
 
-    new SingleAudioContext().stop();
+    new SingleAudioContext().stopAll();
     playing = false;
     
     var audioTrack = new AudioTrack();
@@ -109,7 +120,7 @@ class AudioSamplerController {
   
   void stop(){
     playing = false;
-    new SingleAudioContext().stop();
+    new SingleAudioContext().stopAll();
   }
 //  
 //  void pause(){

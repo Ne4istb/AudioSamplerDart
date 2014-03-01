@@ -22,7 +22,8 @@
       <track number="{{$index + 1}}" cells="trackLine"></track>
     </div>
     
-    <button ng-click="ctrl.play()" ng-hide="ctrl.playing">Play</button>
+    <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
+    <button ng-if="ctrl.playing">Pause</button>
     <button ng-click="ctrl.stop()">Stop</button>
     
     <button ng-click="ctrl.resetTrack()">Reset all</button>

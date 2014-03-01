@@ -55,7 +55,7 @@ class SampleComponent {
       _sample = new Sample(href)..load();
     }
     
-    new SingleAudioContext().stop();
+    new SingleAudioContext().stopAll();
     
     Timer timer = new Timer(new Duration(milliseconds: 250), (){
       _sample.play();

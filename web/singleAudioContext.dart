@@ -1,3 +1,5 @@
+library singleAudioContext;
+
 import 'dart:web_audio';
 import 'dart:async';
 import 'dart:typed_data';
@@ -31,9 +33,13 @@ class SingleAudioContext {
     currentSources.add(source);
   }
   
-  void stop(){
-    currentSources.forEach((source) { source.stop(); });   
+  void stopAll(){
+    currentSources.forEach(_stopSource);   
     currentSources = [];
+  }
+  
+  void _stopSource(AudioBufferSourceNode source){
+    source.stop();
   }
   
   var startOffset = 0;
