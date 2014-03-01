@@ -50,7 +50,7 @@ class SampleComponent {
   
   void playSample(){ 
     new SingleAudioContext().stopAll();
-    new Sample(href).play();
+    Timer timer = new Timer(new Duration(milliseconds: 500), (){
   }
   
   String getColors(){
