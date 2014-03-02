@@ -109,10 +109,11 @@ class AudioSamplerController {
       };
     });
     
-    Timer timer = new Timer(new Duration(seconds: 1), (){
-      audioTrack.play();
+    audioTrack.onPlay.listen((_){
       playing = true;
     });
+    
+    audioTrack.play();
   }
   
   void stop(){
@@ -250,14 +251,13 @@ class AudioPattern{
 
 class AudioTrack{
   
+  StreamController _playController = new StreamController.broadcast();
   List<AudioPattern> _patterns = [];
   
   AudioTrack();
   
   void addSample(Sample sample, num startTime){
 
-    sample.load();
-    
     AudioPattern pattern = new AudioPattern()
       ..sample = sample
       ..startTime = startTime; 
@@ -266,10 +266,22 @@ class AudioTrack{
   }
 
   void play(){
-    _patterns.forEach(playPattern);
+    
+    new Timer(new Duration(milliseconds:100), (){
+
+      if (_patterns.any((pattern) => !pattern.sample.loaded))
+        play();
+      else 
+        _play();
+    });
   }
   
-  void playPattern(AudioPattern pattern){
-    pattern.sample.play(startTime: pattern.startTime);
+  void _play(){
+    _patterns.forEach(_playPattern); 
+    _playController.add("playing");
   }
+  
+  void _playPattern(AudioPattern pattern)=> pattern.sample.play(startTime: pattern.startTime);
+  
+  Stream get onPlay => _playController.stream;
 }

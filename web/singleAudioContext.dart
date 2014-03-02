@@ -32,14 +32,14 @@ class SingleAudioContext {
     
     currentSources.add(source);
   }
-  
+
   void stopAll(){
     currentSources.forEach(_stopSource);   
     currentSources = [];
   }
   
   void _stopSource(AudioBufferSourceNode source){
-//    source.stop();
+    source.stop();
   }
   
   var startOffset = 0;
