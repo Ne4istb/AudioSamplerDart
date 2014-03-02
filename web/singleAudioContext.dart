@@ -39,7 +39,7 @@ class SingleAudioContext {
   }
   
   void _stopSource(AudioBufferSourceNode source){
-    source.stop(0);
+    source.stop();
   }
   
   var startOffset = 0;
