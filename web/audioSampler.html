@@ -18,38 +18,17 @@
     <div class="progressCursor" style="{{ctrl.cursorStyle}}"></div>
      
     <br>
-    <div ng-click="ctrl.setStartPosition($event)">
-      <div ng-repeat="trackLine in ctrl.trackLines">
-        <track number="{{$index + 1}}" cells="trackLine"></track>
-      </div>
+    <div ng-repeat="trackLine in ctrl.trackLines">
+      <track number="{{$index + 1}}" cells="trackLine"></track>
     </div>
     
-    <br>
-    <div>
-      <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
-      <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
-      <button ng-click="ctrl.stop()">Stop</button>
-      
-      <button ng-click="ctrl.resetTrack()">Reset all</button>
-      <button ng-click="ctrl.save()">Save</button>
-    </div>
+    <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
+    <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
+    <button ng-click="ctrl.stop()">Stop</button>
     
-    <br>
-    <div>
-       <!-- AddThis Button BEGIN -->
-      <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
-        <a class="addthis_button_google_plusone_share" title="Google+"></a>
-        <a class="addthis_button_facebook" title="Facebook"></a>
-        <a class="addthis_button_vk" title="VKontakte"></a>
-        <a class="addthis_button_twitter" title="Twitter"></a>
-        <a class="addthis_button_email" title="Email"></a>
-      </div>
-      <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-      <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53165ec16696c9bb"></script>
-      <!-- AddThis Button END -->
-    </div>
-    
-     <script src="packages/shadow_dom/shadow_dom.min.js"></script>
+    <button ng-click="ctrl.resetTrack()">Reset all</button>
+    <button ng-click="ctrl.save()">Save</button>
+    <script src="packages/shadow_dom/shadow_dom.min.js"></script>
     <script type="application/dart" src="audioSampler.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
     <script src="packages/browser/dart.js"></script>
