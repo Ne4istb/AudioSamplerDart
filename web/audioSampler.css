@@ -24,11 +24,6 @@
     left: 70px;
 }
 
-.progress-cursor-in-progress{
-     -webkit-animation: rightThenLeft 79.5s linear;
-}
-
 @-webkit-keyframes rightThenLeft {
-    0%   {left: 70px;}
     100% {left: 1135px;}
 }

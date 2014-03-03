@@ -15,7 +15,7 @@
       </div>
     </div>
     
-    <div class="progressCursor" ng-class="{'progress-cursor-in-progress': {{ctrl.playing}}}"></div>
+    <div class="progressCursor" style="{{ctrl.cursorStyle}}"></div>
      
     <br>
     <div ng-repeat="trackLine in ctrl.trackLines">
@@ -23,7 +23,7 @@
     </div>
     
     <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
-    <button ng-if="ctrl.playing">Pause</button>
+    <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
     <button ng-click="ctrl.stop()">Stop</button>
     
     <button ng-click="ctrl.resetTrack()">Reset all</button>
