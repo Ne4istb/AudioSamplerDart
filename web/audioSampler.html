@@ -18,10 +18,11 @@
     <div class="progressCursor" style="{{ctrl.cursorStyle}}"></div>
      
     <br>
-    <div ng-repeat="trackLine in ctrl.trackLines" ng-click="ctrl.setStartPosition($event)">
-      <track number="{{$index + 1}}" cells="trackLine"></track>
+    <div ng-click="ctrl.setStartPosition($event)">
+      <div ng-repeat="trackLine in ctrl.trackLines">
+        <track number="{{$index + 1}}" cells="trackLine"></track>
+      </div>
     </div>
-    
     <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
     <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
     <button ng-click="ctrl.stop()">Stop</button>
