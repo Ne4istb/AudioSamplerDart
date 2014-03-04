@@ -35,8 +35,11 @@ class AudioSamplerController {
   String _trackOwner;
 
   AudioSamplerController(this._audioTrackService) {
+    
     _id = _getClientId();
     _initTrackLines();
+    
+    window.onKeyDown.listen(onKeyPress);
   }
 
   String _getClientId() {
@@ -136,6 +139,18 @@ class AudioSamplerController {
       cursorStyle += "-webkit-animation: rightThenLeft " + timeToEnd.toString() + "s linear;";
   }
 
+  void onKeyPress(KeyboardEvent e){
+    
+    const int SPACE_KEY = 32;
+    
+    if (e.keyCode != SPACE_KEY) return;
+    
+    if (playing)
+      pause();
+    else
+      play();
+  }
+  
   void save() {
 
     var trackId = _getTrackId();
