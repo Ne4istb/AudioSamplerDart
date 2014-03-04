@@ -4,6 +4,16 @@
   <head>
     <title>Audio sampler using Dart</title>
     <link rel="stylesheet" href="audioSampler.css">
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options(
+        {
+          publisher: "9a17cebc-f855-4801-99dd-065f302bdcad", 
+          doNotHash: true, 
+          doNotCopy: true, 
+          hashAddressBar: true, 
+          popup: 'true'
+        });</script>
   </head>
  
   <body audioSampler class="audioSampler">   
@@ -23,12 +33,25 @@
         <track number="{{$index + 1}}" cells="trackLine"></track>
       </div>
     </div>
-    <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
-    <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
-    <button ng-click="ctrl.stop()">Stop</button>
     
-    <button ng-click="ctrl.resetTrack()">Reset all</button>
-    <button ng-click="ctrl.save()">Save</button>
+    <br>
+    <div>
+      <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
+      <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
+      <button ng-click="ctrl.stop()">Stop</button>
+      
+      <button ng-click="ctrl.resetTrack()">Reset all</button>
+      <button ng-click="ctrl.save()">Save</button>
+    </div>
+    
+    <br>
+    <div>
+      <span class='st_googleplus_large' displayText='Google +'></span>
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_vkontakte_large' displayText='Vkontakte'></span>
+      <span class='st_email_large' displayText='Email'></span>
+    </div>
+    
     <script src="packages/shadow_dom/shadow_dom.min.js"></script>
     <script type="application/dart" src="audioSampler.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
