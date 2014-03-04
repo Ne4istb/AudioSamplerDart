@@ -65,20 +65,22 @@ class AudioSamplerController {
 
     playing = false;
 
-    if (_audioTrack == null){
+    if (_audioTrack == null)
       _audioTrack = new AudioTrack();
-  
-      trackLines.forEach((trackLine) {
-  
-        for (var i = 0; i < trackLine.length; i++) {
-          if (trackLine[i] != null) {
-            _audioTrack.addSample(new Sample(trackLine[i].href), i *
-                SAMPLE_DURATION);
-          }
+    else
+      _audioTrack.clear();
+    
+    trackLines.forEach((trackLine) {
+
+      for (var i = 0; i < trackLine.length; i++) {
+        if (trackLine[i] != null) {
+          _audioTrack.addSample(new Sample(trackLine[i].href), i *
+              SAMPLE_DURATION);
         }
-        ;
-      });
-    }
+      }
+      ;
+    });
+
     
     _audioTrack.onPlay.listen((_) {
       _setCursorStyle(timeToEnd:  79.5 - _audioTrack.pauseTime);
@@ -107,9 +109,23 @@ class AudioSamplerController {
     if (_audioTrack != null) _audioTrack.pause();
     
     playing = false;
-    pausePosition = _audioTrack.pauseTime * ((1135-70)/79.5) + 70;
+    pausePosition = _cursorTimeToPosition;
     
     _setCursorStyle();
+  }
+
+  num get _cursorTimeToPosition => _audioTrack.pauseTime * ((1135-70)/79.5) + 70;
+  num get _cursorPositionToTime => (pausePosition - 70) / (1135-70) * 79.5;   
+  
+  void setStartPosition (MouseEvent e){
+    
+    if (playing) return;
+    
+    pausePosition = e.client.x;
+    _setCursorStyle();
+    
+    _audioTrack = new AudioTrack()
+        ..pauseTime = _cursorPositionToTime;
   }
   
   String cursorStyle = "left: 70px;";
@@ -355,6 +371,9 @@ class AudioTrack {
   AudioTrack();
 
   num get pauseTime => _startOffset; 
+  void set pauseTime(num pauseTime){
+    _startOffset = pauseTime; 
+  } 
   
   void addSample(Sample sample, num startTime) {
 
@@ -363,6 +382,10 @@ class AudioTrack {
         ..startTime = startTime;
 
     _patterns.add(pattern);
+  }
+  
+  void clear(){
+    _patterns = [];
   }
 
   void play() {

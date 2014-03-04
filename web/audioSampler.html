@@ -18,7 +18,7 @@
     <div class="progressCursor" style="{{ctrl.cursorStyle}}"></div>
      
     <br>
-    <div ng-repeat="trackLine in ctrl.trackLines">
+    <div ng-repeat="trackLine in ctrl.trackLines" ng-click="ctrl.setStartPosition($event)">
       <track number="{{$index + 1}}" cells="trackLine"></track>
     </div>
     
