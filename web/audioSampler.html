@@ -4,16 +4,6 @@
   <head>
     <title>Audio sampler using Dart</title>
     <link rel="stylesheet" href="audioSampler.css">
-    <script type="text/javascript">var switchTo5x=true;</script>
-    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-    <script type="text/javascript">stLight.options(
-        {
-          publisher: "9a17cebc-f855-4801-99dd-065f302bdcad", 
-          doNotHash: true, 
-          doNotCopy: true, 
-          hashAddressBar: true, 
-          popup: 'true'
-        });</script>
   </head>
  
   <body audioSampler class="audioSampler">   
@@ -46,13 +36,20 @@
     
     <br>
     <div>
-      <span class='st_googleplus_large' displayText='Google +'></span>
-      <span class='st_facebook_large' displayText='Facebook'></span>
-      <span class='st_vkontakte_large' displayText='Vkontakte'></span>
-      <span class='st_email_large' displayText='Email'></span>
+       <!-- AddThis Button BEGIN -->
+      <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+        <a class="addthis_button_google_plusone_share" title="Google+"></a>
+        <a class="addthis_button_facebook" title="Facebook"></a>
+        <a class="addthis_button_vk" title="VKontakte"></a>
+        <a class="addthis_button_twitter" title="Twitter"></a>
+        <a class="addthis_button_email" title="Email"></a>
+      </div>
+      <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+      <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53165ec16696c9bb"></script>
+      <!-- AddThis Button END -->
     </div>
     
-    <script src="packages/shadow_dom/shadow_dom.min.js"></script>
+     <script src="packages/shadow_dom/shadow_dom.min.js"></script>
     <script type="application/dart" src="audioSampler.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
     <script src="packages/browser/dart.js"></script>
