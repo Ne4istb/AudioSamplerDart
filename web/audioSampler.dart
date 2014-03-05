@@ -1,6 +1,8 @@
 import 'package:angular/angular.dart';
 import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
+import 'shareButton/shareButton.dart';
+
 import 'audioTrackService.dart';
 import 'package:uuid/uuid.dart';
 import 'singleAudioContext.dart';
@@ -19,6 +21,7 @@ void main() {
       ..type(AudioSamplerController)
       ..type(TrackLineComponent)
       ..type(SampleComponent)
+      ..type(ShareButtonComponent)
       ..type(AudioTrackService));
 }
 
@@ -33,13 +36,20 @@ class AudioSamplerController {
   AudioTrackService _audioTrackService;
   String _id;
   String _trackOwner;
+  Scope _scope;
 
-  AudioSamplerController(this._audioTrackService) {
+  AudioSamplerController(this._scope, this._audioTrackService) {
     
     _id = _getClientId();
     _initTrackLines();
     
     window.onKeyDown.listen(onKeyPress);
+    
+//    _scope.$watchCollection(trackLines, onTrackLinesChanged);
+  }
+  
+  void onTrackLinesChanged(obj){
+    print(obj);
   }
 
   String _getClientId() {
@@ -50,7 +60,7 @@ class AudioSamplerController {
   void _initTrackLines() {
     //TODO Simplify it using path on production
     var path = window.location.href;
-
+    print(path);
     if (path.contains('#')) {
       var trackId = path.split('#')[1];
 
