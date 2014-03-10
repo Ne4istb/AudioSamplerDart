@@ -44,13 +44,17 @@ class TrackLineComponent {
   }
 
   void onItemDragged(int index) {
-    if (!_ctrlPressed && _clearCellAllowed) clearCell(index);
+    
+    if (!_ctrlPressed && _clearCellAllowed) removeSample(index);
 
     _ctrlPressed = false;
     _clearCellAllowed = false;
   }
-
-  void clearCell(int index) {
+  
+  void removeSample (int index){
+    
+    _scope.$emit('sampleRemoved', [index, cells[index].href]);
+    
     cells[index] = null;
   }
 }

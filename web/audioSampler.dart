@@ -45,12 +45,19 @@ class AudioSamplerController {
     
     window.onKeyDown.listen(onKeyPress);
     
-    _scope.$on('sampleAdded', onTrackLinesChanged);
+    _scope.$on('sampleAdded', onSampleAdded);
+    _scope.$on('sampleRemoved', onSampleRemoved);
   }
   
-  void onTrackLinesChanged(event, index, sampleName){
+  void onSampleAdded(event, index, sampleName){
     if (_audioTrack!=null){
       _audioTrack.addSample(new Sample(sampleName), index*SAMPLE_DURATION);
+    }
+  }
+  
+  void onSampleRemoved(event, index, sampleName){
+    if (_audioTrack!=null){
+      _audioTrack.removeSample(new Sample(sampleName), index*SAMPLE_DURATION);
     }
   }
 
@@ -112,6 +119,9 @@ class AudioSamplerController {
     pausePosition = 70;
     
     _setCursorStyle();
+    
+    if (_audioTrack == null)
+      return;
     
     _audioTrack.stop();
     _audioTrack = null;
@@ -413,6 +423,16 @@ class AudioTrack {
     
     if (_isPlaying)
       _playSample(pattern);
+  }
+  
+  void removeSample(Sample sample, num startTime) {
+
+    _patterns.removeWhere((pattern) => pattern.sample == sample && pattern.startTime == startTime);
+    
+    if (_isPlaying){
+      pause();
+      _play();
+    }
   }
   
   void clear(){
