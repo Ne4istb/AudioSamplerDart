@@ -33,7 +33,10 @@
       <button ng-click="ctrl.resetTrack()">Reset all</button>
       <button ng-click="ctrl.save()">Save</button>
     </div>
-    
+    <br>
+    <div>
+      {{ctrl.time | timerFilter}}
+    </div>
     <br>
     <div>
       <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="https://www.gstatic.com/images/icons/gplus-32.png"></share>

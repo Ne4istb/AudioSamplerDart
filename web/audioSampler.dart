@@ -1,4 +1,5 @@
 import 'package:angular/angular.dart';
+import 'package:intl/intl.dart';
 import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'shareButton/shareButton.dart';
@@ -22,7 +23,27 @@ void main() {
       ..type(TrackLineComponent)
       ..type(SampleComponent)
       ..type(ShareButtonComponent)
-      ..type(AudioTrackService));
+      ..type(AudioTrackService)
+      ..type(TimerFilter));
+}
+
+// Declaration
+@NgFilter(name:'timerFilter')
+class TimerFilter {
+  call(num value) {
+
+    var formatter = new NumberFormat("00", "en_US");
+    
+    int minutes = value ~/ 60;
+    String minutesStr = formatter.format(minutes);
+    
+    String seconds = formatter.format(value - value % 1 - (minutes * 60));
+    
+    formatter = new NumberFormat("000", "en_US");
+    String millis = formatter.format(value % 1 * 1000);
+
+    return "$minutesStr : $seconds : $millis";
+  }
 }
 
 @NgController(selector: '[audioSampler]', publishAs: 'ctrl')
@@ -96,8 +117,7 @@ class AudioSamplerController {
 
       for (var i = 0; i < trackLine.length; i++) {
         if (trackLine[i] != null) {
-          _audioTrack.addSample(new Sample(trackLine[i].href), i *
-              SAMPLE_DURATION);
+          _audioTrack.addSample(new Sample(trackLine[i].href), i * SAMPLE_DURATION);
         }
       }
       ;
@@ -110,6 +130,7 @@ class AudioSamplerController {
     });
 
     _audioTrack.play();
+    runPlayTimer();
   }
 
   
@@ -119,6 +140,8 @@ class AudioSamplerController {
     pausePosition = 70;
     
     _setCursorStyle();
+    
+    _playTimer.cancel();
     
     if (_audioTrack == null)
       return;
@@ -137,6 +160,8 @@ class AudioSamplerController {
     pausePosition = _cursorTimeToPosition;
     
     _setCursorStyle();
+    
+    _playTimer.cancel();
   }
 
   num get _cursorTimeToPosition => _audioTrack.pauseTime * ((1135-70)/79.5) + 70;
@@ -151,6 +176,8 @@ class AudioSamplerController {
     
     _audioTrack = new AudioTrack()
         ..pauseTime = _cursorPositionToTime;
+    
+    time = _audioTrack.pauseTime;
   }
   
   String cursorStyle = "left: 70px;";
@@ -171,6 +198,18 @@ class AudioSamplerController {
       pause();
     else
       play();
+  }
+  
+  Timer _playTimer;
+  num time = 0;
+  void runPlayTimer(){
+    _playTimer = new Timer(new Duration(milliseconds: 100), () {
+      
+      if (_audioTrack != null)
+        time = _audioTrack.currentTime;
+      
+      runPlayTimer();
+    });
   }
   
   void save() {
@@ -409,6 +448,7 @@ class AudioTrack {
   AudioTrack();
 
   num get pauseTime => _startOffset; 
+  
   void set pauseTime(num pauseTime){
     _startOffset = pauseTime; 
   } 
@@ -474,12 +514,12 @@ class AudioTrack {
   }
 
   void pause() {
-    _startOffset = getStartOffset;
+    _startOffset = currentTime;
     
     stop();
   }
 
-  double get getStartOffset => new SingleAudioContext().currentTime - _startTime;
+  double get currentTime => new SingleAudioContext().currentTime - _startTime;
 
   void stop(){
     
@@ -495,7 +535,7 @@ class AudioTrack {
     new Timer(new Duration(milliseconds: 100), () {
 
       if (pattern.sample.loaded)
-        _playPattern(pattern, getStartOffset);
+        _playPattern(pattern, currentTime);
       else
         _playSample(pattern);
     });
