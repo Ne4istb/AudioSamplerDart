@@ -45,11 +45,13 @@ class AudioSamplerController {
     
     window.onKeyDown.listen(onKeyPress);
     
-//    _scope.$watchCollection(trackLines, onTrackLinesChanged);
+    _scope.$on('sampleAdded', onTrackLinesChanged);
   }
   
-  void onTrackLinesChanged(obj){
-    print(obj);
+  void onTrackLinesChanged(event, index, sampleName){
+    if (_audioTrack!=null){
+      _audioTrack.addSample(new Sample(sampleName), index*SAMPLE_DURATION);
+    }
   }
 
   String _getClientId() {
@@ -392,6 +394,7 @@ class AudioTrack {
   List<AudioPattern> _patterns = [];
   double _startTime = 0.0;
   double _startOffset = 0.0;
+  bool _isPlaying = false;
 
   AudioTrack();
 
@@ -407,6 +410,9 @@ class AudioTrack {
         ..startTime = startTime;
 
     _patterns.add(pattern);
+    
+    if (_isPlaying)
+      _playSample(pattern);
   }
   
   void clear(){
@@ -430,26 +436,48 @@ class AudioTrack {
 
     _startTime = new SingleAudioContext().currentTime - _startOffset;
 
-    _patterns.where((pattern) => pattern.startTime>= _startOffset - SAMPLE_DURATION).forEach(_playPattern);
+    _patterns
+      .where((pattern) => pattern.startTime>= _startOffset - SAMPLE_DURATION)
+      .forEach((pattern) { _playPattern(pattern, _startOffset); });
     
+    _isPlaying = true;
     _playController.add("playing");
   }
 
-  void _playPattern(AudioPattern pattern) {
+  void _playPattern(AudioPattern pattern, double startOffset) {
     
     num offset = 0;
-    if (pattern.startTime <_startOffset)
-      offset = _startOffset - pattern.startTime; 
+    if (pattern.startTime <startOffset)
+      offset = startOffset - pattern.startTime; 
       
-    pattern.sample.play(pattern.startTime - _startOffset, offset); 
+    pattern.sample.play(pattern.startTime - startOffset, offset); 
   }
 
   void pause() {
-    _startOffset = new SingleAudioContext().currentTime - _startTime;
+    _startOffset = getStartOffset;
+    
     stop();
   }
 
-  void stop() => new SingleAudioContext().stopAll();
+  double get getStartOffset => new SingleAudioContext().currentTime - _startTime;
+
+  void stop(){
+    
+    new SingleAudioContext().stopAll();
+    
+    _isPlaying = false;
+  }
 
   Stream get onPlay => _playController.stream;
+  
+  void _playSample(AudioPattern pattern) {
+
+    new Timer(new Duration(milliseconds: 100), () {
+
+      if (pattern.sample.loaded)
+        _playPattern(pattern, getStartOffset);
+      else
+        _playSample(pattern);
+    });
+  }
 }

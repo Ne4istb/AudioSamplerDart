@@ -18,6 +18,9 @@ class TrackLineComponent {
   @NgTwoWay('cells')
   List<TrackLineCell> cells;
 
+  Scope _scope;
+  TrackLineComponent(this._scope);
+    
   bool _clearCellAllowed = false;
   void drop(MouseEvent e, int index) {
 
@@ -26,10 +29,12 @@ class TrackLineComponent {
     String id = e.dataTransfer.getData('Id');
     if (id != (e.currentTarget as Element).id) _clearCellAllowed = true;
 
-    String sampleName2 = e.dataTransfer.getData('SampleName');
+    String sampleName = e.dataTransfer.getData('SampleName');
     String sampleHref = e.dataTransfer.getData('SampleHref');
 
-    cells[index] = new TrackLineCell(sampleName2, sampleHref);
+    cells[index] = new TrackLineCell(sampleName, sampleHref);
+    
+    _scope.$emit('sampleAdded', [index, sampleHref]);
   }
 
   bool _ctrlPressed;
