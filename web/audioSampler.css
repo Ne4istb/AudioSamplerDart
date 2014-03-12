@@ -1,12 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
+
+BODY {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 13px;
+}
+
 .audioSampler{
   background-color: grey;
 }
 
-.samplesContainer{
-  display: inline-block;
+.samplesContainer{  
   background-color: #D1CCCC ;
-  min-height: 50px;
-  width: 99%;
+  min-height: 50px; 
   border: 2px solid black;
   margin-bottom: 10px;
   padding: 5px;
@@ -27,3 +53,61 @@
 @-webkit-keyframes rightThenLeft {
     100% {left: 1135px;}
 }
+
+.header,
+.controls-area {
+  height: 50px;
+  background: #000;
+  overflow: hidden; 
+}
+
+.navbar-brand {
+  margin: 15px 0 0 0;
+  float: left;
+  font-weight: bold;
+  font-size: 18px;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.social-group {
+  float: right;
+  margin: 10px 0 0 0;
+}
+
+.container {
+  margin: 0 auto;
+  width: 1170px;
+}
+
+.track-area,
+.controls-area {
+  margin-top: 20px;
+}
+
+.sound-banks {
+  border-top: 1px solid #fff;
+  height: 30px;
+}
+
+.btn-bank {
+  background: #000;
+  border-color: transparent transparent transparent #fff;
+  border-style: solid;
+  border-width: 1px;
+  line-height: 30px;
+  width: 16.66%;
+  text-align: center;  
+  color: #FFF;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-bank:first-child {
+  border-color: transparent;  
+}
+
+
+
+
+

@@ -9,15 +9,15 @@
     float:left;
     height: 27px;
     border-right: 2px solid #B9B91D;
-    padding-right: 5px;
-    padding-left: 5px;
-    padding-top: 5px;
+    padding: 5px 0 0;
+    width: 97px;
+    text-align: center;
     background-color: #58AF3C ;
 }
 
 .workspace{
     height: 10px;
-    padding: 5px;
+    padding: 5px 0;
 }
 
 .cell{

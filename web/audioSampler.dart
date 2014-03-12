@@ -27,7 +27,6 @@ void main() {
       ..type(TimerFilter));
 }
 
-// Declaration
 @NgFilter(name:'timerFilter')
 class TimerFilter {
   call(num value) {
@@ -69,6 +68,8 @@ class AudioSamplerController {
     _scope.$on('sampleAdded', onSampleAdded);
     _scope.$on('sampleRemoved', onSampleRemoved);
   }
+  var bankCategories =['Beat', 'Bass', 'Guitar', 'Effect', 'Keys', 'Jungle'];
+  String currentBankCategory = 'Beat';
   
   void onSampleAdded(event, index, sampleName){
     if (_audioTrack!=null){
