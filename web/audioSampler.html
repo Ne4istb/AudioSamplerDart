@@ -34,6 +34,10 @@
       </div>
       
       <div class="controls-area">
+        <div>
+          <input type="range" ng-change="ctrl.volumeLevelChanged($event)" min="0" max="200">
+        </div>
+      
         <div class="timer">
           {{ctrl.time | timerFilter}}
         </div>

@@ -104,7 +104,7 @@ class AudioSamplerController {
 
   bool playing = false;
   AudioTrack _audioTrack;
-
+  
   void play() {
 
     playing = false;
@@ -134,7 +134,6 @@ class AudioSamplerController {
     runPlayTimer();
   }
 
-  
   void stop() {
     
     playing = false;
@@ -211,6 +210,14 @@ class AudioSamplerController {
       
       runPlayTimer();
     });
+  }
+  
+  void volumeLevelChanged(Event event){
+    String value = (event.target as dynamic).value;
+    num level =  int.parse(value) /100;
+    
+    if (_audioTrack != null)
+      _audioTrack.setVolumeLevel(level);
   }
   
   void save() {
@@ -448,6 +455,10 @@ class AudioTrack {
 
   AudioTrack();
 
+  void setVolumeLevel(num level){
+    new SingleAudioContext().setVolume(level);
+  }
+  
   num get pauseTime => _startOffset; 
   
   void set pauseTime(num pauseTime){

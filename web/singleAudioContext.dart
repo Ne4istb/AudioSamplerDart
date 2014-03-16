@@ -24,15 +24,28 @@ class SingleAudioContext {
   }
 
   List<AudioBufferSourceNode> _currentSources = [];
-
+  GainNode gainNode;
+  
   var startTime = 0;
   void playFromBuffer([AudioBuffer buffer, num startTime, num offset]) {
+    
+    if (gainNode == null){
+      gainNode = _audioContext.createGain();
+    }
+    
     AudioBufferSourceNode source = _audioContext.createBufferSource()
         ..buffer = buffer
-        ..connectNode(_audioContext.destination)
-        ..start(_audioContext.currentTime + startTime, offset);
+        ..connectNode (gainNode);
+    
+    gainNode.connectNode(_audioContext.destination);
+    
+    source.start(_audioContext.currentTime + startTime, offset);
 
     _currentSources.add(source);
+  }
+  
+  void setVolume(num level){
+    gainNode.gain.setValueAtTime(level, _audioContext.currentTime);
   }
 
   void stopAll() {
