@@ -5,13 +5,15 @@
     <title>Audio sampler using Dart</title>    
     <link rel="stylesheet" href="audioSampler.css">
     <!-- Latest compiled and minified CSS -->   
+    
+    <link rel="stylesheet" href="libs/introjs/introjs.min.css">
   </head>
  
   <body audioSampler class="audioSampler">   
    
    <div class="header">
       <div class="container clearfix">       
-        <a class="navbar-brand" href="#">Audio sampler Dart</a>              
+        <a class="navbar-brand" href="#" data-step="1" data-intro="Hi, it is audio sampler written on Dart. Let's go thourh introduction demo!">Audio sampler Dart</a>              
         
         <div class="social-group">
             <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="https://www.gstatic.com/images/icons/gplus-32.png"></share>
@@ -49,10 +51,11 @@
           
           <button ng-click="ctrl.resetTrack()">Reset all</button>
           <button ng-click="ctrl.save()">Save</button>
+          <button onclick="javascript:introJs().start();">Help</button>
         </div>
       </div>
       
-      <div class="sound-banks">
+      <div class="sound-banks" data-step="2" data-intro="It is sound bank, where you can select samples for your track. Select tab by category" data-position='top'>
         <button class="btn-bank" 
                 ng-repeat="bank in ctrl.bankCategories"
                 ng-click="ctrl.currentBankCategory = bank">
@@ -84,5 +87,6 @@
     <script type="application/dart" src="audioSampler.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
     <script src="packages/browser/dart.js"></script>
+    <script src="libs/introjs/intro.min.js"></script>
   </body>
 </html>

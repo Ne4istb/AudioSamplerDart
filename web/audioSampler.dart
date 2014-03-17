@@ -50,6 +50,11 @@ class AudioSamplerController {
 
   final String CLIENT_ID = 'clientId';
   final num SAMPLE_DURATION = 5.3;
+  
+  static int START_POSITION = 99;
+  static int SAMPLE_WIDTH = 71;
+  static int TRACK_LINE_WIDTH = 71;
+  static num TRACK_LENGTH = 79.5;
 
   List<List<TrackLineCell>> trackLines = [];
 
@@ -126,7 +131,7 @@ class AudioSamplerController {
 
     
     _audioTrack.onPlay.listen((_) {
-      _setCursorStyle(timeToEnd:  79.5 - _audioTrack.pauseTime);
+      _setCursorStyle(timeToEnd: TRACK_LENGTH - _audioTrack.pauseTime);
       playing = true;
     });
 
@@ -137,7 +142,7 @@ class AudioSamplerController {
   void stop() {
     
     playing = false;
-    pausePosition = 70;
+    pausePosition = START_POSITION;
     
     _setCursorStyle();
     
@@ -150,7 +155,7 @@ class AudioSamplerController {
     _audioTrack = null;
   }
 
-  var pausePosition = 70;
+  var pausePosition = START_POSITION;
   
   void pause() {
     
@@ -164,14 +169,14 @@ class AudioSamplerController {
     _playTimer.cancel();
   }
 
-  num get _cursorTimeToPosition => _audioTrack.pauseTime * ((1135-70)/79.5) + 70;
-  num get _cursorPositionToTime => (pausePosition - 70) / (1135-70) * 79.5;   
+  num get _cursorTimeToPosition => _audioTrack.pauseTime * (TRACK_LINE_WIDTH/TRACK_LENGTH) + START_POSITION;
+  num get _cursorPositionToTime => (pausePosition - START_POSITION) / TRACK_LINE_WIDTH * TRACK_LENGTH;   
   
   void setStartPosition (MouseEvent e){
     
     if (playing) return;
     
-    pausePosition = e.client.x;
+    pausePosition = e.client.x - (e.currentTarget as Node).parent.parent.offsetLeft;
     _setCursorStyle();
     
     _audioTrack = new AudioTrack()
@@ -180,7 +185,7 @@ class AudioSamplerController {
     time = _audioTrack.pauseTime;
   }
   
-  String cursorStyle = "left: 70px;";
+  String cursorStyle = "left: " + START_POSITION.toString() +"px;";
   void _setCursorStyle({num timeToEnd : 0}){
     
     cursorStyle = "left: " + pausePosition.toString() + "px; ";

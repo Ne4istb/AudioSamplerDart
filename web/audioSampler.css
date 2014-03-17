@@ -47,7 +47,7 @@ BODY {
     margin-right: auto;
     z-index: 5; 
     position:absolute;
-    left: 70px;
+    left: 97px;
 }
 
 @-webkit-keyframes rightThenLeft {
@@ -76,6 +76,7 @@ BODY {
 }
 
 .container {
+  position: relative;
   margin: 0 auto;
   width: 1170px;
 }
