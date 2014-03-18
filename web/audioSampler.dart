@@ -70,8 +70,8 @@ class AudioSamplerController {
     
     window.onKeyDown.listen(onKeyPress);
     
-//    _scope.$on('sampleAdded', onSampleAdded);
-//    _scope.$on('sampleRemoved', onSampleRemoved);
+    _scope.$on('sampleAdded', onSampleAdded);
+    _scope.$on('sampleRemoved', onSampleRemoved);
   }
   var bankCategories =['Beat', 'Bass', 'Guitar', 'Effect', 'Keys', 'Jungle'];
   String currentBankCategory = 'Beat';
