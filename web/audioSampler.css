@@ -21,18 +21,25 @@
     *zoom: 1;
 }
 
+HTML,
+BODY {
+  height: 100%; 
+}
+
 BODY {
   font-family: Verdana, Arial, sans-serif;
   font-size: 13px;
+  
 }
 
 .audioSampler{
-  background-color: grey;
+  background:  #000 url("images/bg.jpg");
+  height: 100%;
 }
 
 .samplesContainer{  
-  background-color: #D1CCCC ;
-  min-height: 50px; 
+  background-color:rgba(255,255,255,0.9);
+  min-height: 200px; 
   border: 2px solid black;
   margin-bottom: 10px;
   padding: 5px;
@@ -54,11 +61,29 @@ BODY {
     100% {left: 1135px;}
 }
 
+.timer{
+  float: right;
+  margin: 10px 0 0 0;
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: none;
+  
+}
+
+.volume-control{
+  float: left;
+  margin: 10px 0 0 0;
+}
+
 .header,
-.controls-area {
-  height: 50px;
-  background: #000;
+.controls-area,
+.footer {
+  height: 50px; 
   overflow: hidden; 
+}
+
+.controls-area {
+   background: #000; 
 }
 
 .navbar-brand {
@@ -66,7 +91,7 @@ BODY {
   float: left;
   font-weight: bold;
   font-size: 18px;
-  color: #FFF;
+  color: yellow;
   text-decoration: none;
 }
 
@@ -83,6 +108,7 @@ BODY {
 
 .track-area,
 .controls-area {
+  background-color:rgba(255,255,255,0.7);
   margin-top: 20px;
 }
 
@@ -92,7 +118,7 @@ BODY {
 }
 
 .btn-bank {
-  background: #000;
+  background: #000 url("images/carbon_bg.png") repeat-x;
   border-color: transparent transparent transparent #fff;
   border-style: solid;
   border-width: 1px;
@@ -106,6 +132,23 @@ BODY {
 
 .btn-bank:first-child {
   border-color: transparent;  
+}
+
+.footer,
+.header {
+  background: #000 url("images/carbon_bg.png") repeat-x;
+}
+
+.footer {
+  position: fixed;
+  width: 100%;
+  left: 0;  
+  bottom: 0;
+}
+
+.footer SPAN {
+  color: yellow;
+  line-height: 50px;
 }
 
 

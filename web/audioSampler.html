@@ -15,12 +15,7 @@
       <div class="container clearfix">       
         <a class="navbar-brand" href="#" data-step="1" data-intro="Hi, it is audio sampler written on Dart. Let's go thourh introduction demo!">Audio sampler Dart</a>              
         
-        <div class="social-group">
-            <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="https://www.gstatic.com/images/icons/gplus-32.png"></share>
-            <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="http://static.batu.me/assets/img/icons/facebook-32x32.png"></share>
-            <share alt="Share on Vkontakte" href="http://vk.com/share.php?url=SHARE_URL" icon="http://vk.com/images/vk32.png"></share>
-            <share alt="Share on Twitter" href="https://twitter.com/share?url=SHARE_URL" icon="https://dev.twitter.com/sites/default/files/images_documentation/bird_blue_32.png"></share>
-          </div>
+        
       </div>
     </div>
     
@@ -36,7 +31,7 @@
       </div>
       
       <div class="controls-area">
-        <div>
+        <div class="volume-control">
           <input type="range" ng-change="ctrl.volumeLevelChanged($event)" min="0" max="200">
         </div>
       
@@ -68,19 +63,18 @@
           <sample name="{{sample.name}}" href="{{sample.href}}"></sample>
         </div>
       </div>
-      
-      <div>
-        Instructions:
-        <ul>
-          <li>Drag&Drop sample from bank to add it to  the arranger</li>
-          <li>Right mouse click to delete sample from the arranger</li>
-          <li>Drag&Drop sample inside arranger to move it</li>
-          <li>Hold Ctrl key and Drag&Drop sample inside arranger to clone it</li>
-          <li>Double click on sample to play it</li>
-          <li>Click any place inside arranger to set start playing position</li>
-        </ul>
+    </div>
+    
+    <div class="footer">
+      <div class=container>
+        <span>&trade; Ne4istb 2014</span>
+        <div class="social-group">
+            <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="https://www.gstatic.com/images/icons/gplus-32.png"></share>
+            <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="http://static.batu.me/assets/img/icons/facebook-32x32.png"></share>
+            <share alt="Share on Vkontakte" href="http://vk.com/share.php?url=SHARE_URL" icon="http://vk.com/images/vk32.png"></share>
+            <share alt="Share on Twitter" href="https://twitter.com/share?url=SHARE_URL" icon="https://dev.twitter.com/sites/default/files/images_documentation/bird_blue_32.png"></share>
+        </div>  
       </div>
-
     </div>
     
     <script src="packages/shadow_dom/shadow_dom.min.js"></script>
