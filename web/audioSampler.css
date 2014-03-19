@@ -27,8 +27,8 @@ BODY {
 }
 
 BODY {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 13px;
+  font-family: 'Share Tech', sans-serif;
+  font-size: 16px;
   
 }
 
@@ -46,7 +46,7 @@ BODY {
 }
 
 .progressCursor{
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, .5);
     height: 200px;
     width: 0px;
     margin-top: -5px;
@@ -57,33 +57,56 @@ BODY {
     left: 97px;
 }
 
+.progress-cursor-playing{
+  box-shadow: 0px 0px 12px 4px #fff;
+}
+
 @-webkit-keyframes rightThenLeft {
     100% {left: 1135px;}
 }
 
-.timer{
-  float: right;
-  margin: 10px 0 0 0;
-  font-weight: bold;
-  font-size: 18px;
-  text-decoration: none;
-  
+.timer,
+.volume-control,
+.controls {
+  float: left;  
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
-.volume-control{
-  float: left;
-  margin: 10px 0 0 0;
+.timer,
+.volume-control {
+  margin: 20px 0 0 0;
+  width: 15%;  
+}
+
+.timer{ 
+  font-weight: bold;
+  font-size: 26px;
+  text-decoration: none;
+  text-align: right;  
+}
+
+.controls {
+  width: 70%;
+  text-align: center;
 }
 
 .header,
 .controls-area,
-.footer {
-  height: 50px; 
+.footer {   
   overflow: hidden; 
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
+.header,
+.footer {
+  height: 50px;
+} 
+
 .controls-area {
-   background: #000; 
+   padding: 10px 15px;  
+   height: 80px; 
 }
 
 .navbar-brand {
@@ -91,7 +114,7 @@ BODY {
   float: left;
   font-weight: bold;
   font-size: 18px;
-  color: yellow;
+  color: #f5d049;
   text-decoration: none;
 }
 
@@ -125,9 +148,16 @@ BODY {
   line-height: 30px;
   width: 16.66%;
   text-align: center;  
-  color: #FFF;
-  font-weight: bold;
+  color: #FFF;  
   cursor: pointer;
+  font-size: 16px;
+  font-family: 'Share Tech', sans-serif;
+}
+
+.btn-bank:focus,
+.btn-bank:hover {
+  outline: 3px solid #f5d049;
+  
 }
 
 .btn-bank:first-child {
@@ -147,9 +177,78 @@ BODY {
 }
 
 .footer SPAN {
-  color: yellow;
+  color: #f5d049;
   line-height: 50px;
+  font-size: 16px;
+  font-weight: bold;
 }
+
+.btn {
+  display: inline-block;  
+  border: none;
+  background-color: transparent;
+  background-image: url("images/sprite.png");
+  background-repeat: no-repeat;
+  background-position-y: 0;
+  background-size: 770% 100%;
+  text-indent: -1000px;
+  cursor: pointer;  
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.back {
+   background-position-x: -120px;
+}
+
+.pause {
+  background-position-x: -100px;
+}
+
+.play {
+  width: 60px;
+  height: 60px;
+}
+
+.stop {
+  background-position-x: -50px;
+}
+
+.forward {
+  background-position-x: -160px;
+}
+
+.forward,
+.back,
+.help,
+.reset,
+.save {
+  width: 40px;
+  height: 40px;
+}
+
+.stop,
+.pause {
+  width: 50px;
+  height: 50px;  
+}
+
+.top-controls {
+  float: right;  
+}
+
+.help,
+.reset,
+.save {  
+  color: #f5d049;
+  font-size: 18px;
+  margin-top: 5px;
+  text-indent: initial;
+  background-position-x: -200px;  
+}
+
 
 
 

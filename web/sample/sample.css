@@ -1,15 +1,16 @@
 .sample{
   float:left;
   margin: 5px;
-  height: 25px;
-  width: 70px;
-  text-align: center;
-  padding-top: 5px;
+  height: 28px;
+  width: 69px;
+  text-align: center;  
   cursor: pointer;
+  line-height: 28px;
+  font-size: 14px;
+  color: #FFF;
+  border: 1px dashed transparent;
 }
 
 .sample:hover{
-    border: 1px dashed black;
-    width: 68px;
-    height: 23px;
+    border-color: black;    
 }

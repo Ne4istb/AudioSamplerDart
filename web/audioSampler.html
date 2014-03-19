@@ -3,10 +3,13 @@
 <html ng-app>
   <head>
     <title>Audio sampler using Dart</title>    
-    <link rel="stylesheet" href="audioSampler.css">
+    <link href='http://fonts.googleapis.com/css?family=Share+Tech' rel='stylesheet' type='text/css'>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+   
     <!-- Latest compiled and minified CSS -->   
     
     <link rel="stylesheet" href="libs/introjs/introjs.min.css">
+    <link rel="stylesheet" href="audioSampler.css">
   </head>
  
   <body audioSampler class="audioSampler">   
@@ -14,14 +17,23 @@
    <div class="header">
       <div class="container clearfix">       
         <a class="navbar-brand" href="#" data-step="1" data-intro="Hi, it is audio sampler written on Dart. Let's go thourh introduction demo!">Audio sampler Dart</a>              
-        
-        
+        <div class="top-controls">
+          <button class="btn reset" ng-click="ctrl.resetTrack()">
+            <i class="icon-undo"></i>
+          </button>
+          <button class="btn save" ng-click="ctrl.save()">
+            <i class="icon-save"></i>
+          </button>                    
+          <button class="btn help" onclick="javascript:introJs().start();">
+            <i class="icon-question"></i>
+          </button>
+        </div>        
       </div>
     </div>
     
     <div class="container">      
       <div class="track-area">
-        <div class="progressCursor" style="{{ctrl.cursorStyle}}"></div>    
+        <div class="progressCursor" style="{{ctrl.cursorStyle}}" ng-class="{'progress-cursor-playing': ctrl.playing}"></div>    
         
         <div ng-click="ctrl.setStartPosition($event)">
           <div ng-repeat="trackLine in ctrl.trackLines">
@@ -34,20 +46,19 @@
         <div class="volume-control">
           <input type="range" ng-change="ctrl.volumeLevelChanged($event)" min="0" max="200">
         </div>
+        
+        <div class="controls">
+          <button class="btn back">Back</button>
+          <button class="btn pause" ng-click="ctrl.pause()">Pause</button>
+          <button class="btn play" ng-click="ctrl.play()" >Play</button>
+          <button class="btn stop" ng-click="ctrl.stop()">Stop</button>
+          <button class="btn forward">Forward</button>                   
+        </div>
       
         <div class="timer">
           {{ctrl.time | timerFilter}}
-        </div>
+        </div>        
         
-        <div class="controls">
-          <button ng-click="ctrl.play()" ng-if="!ctrl.playing">Play</button>
-          <button ng-click="ctrl.pause()" ng-if="ctrl.playing">Pause</button>
-          <button ng-click="ctrl.stop()">Stop</button>
-          
-          <button ng-click="ctrl.resetTrack()">Reset all</button>
-          <button ng-click="ctrl.save()">Save</button>
-          <button onclick="javascript:introJs().start();">Help</button>
-        </div>
       </div>
       
       <div class="sound-banks" data-step="2" data-intro="It is sound bank, where you can select samples for your track. Select tab by category" data-position='top'>
@@ -67,7 +78,7 @@
     
     <div class="footer">
       <div class=container>
-        <span>&trade; Ne4istb 2014</span>
+        <span>Ne4istb 2014</span>
         <div class="social-group">
             <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="https://www.gstatic.com/images/icons/gplus-32.png"></share>
             <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="http://static.batu.me/assets/img/icons/facebook-32x32.png"></share>
