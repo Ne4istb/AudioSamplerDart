@@ -33,7 +33,7 @@
     
     <div class="container">      
       <div class="track-area">
-        <div class="progressCursor" style="{{ctrl.cursorStyle}}" ng-class="{'progress-cursor-playing': ctrl.playing}"></div>    
+        <div class="progressCursor" style="{{ctrl.cursorStyle}}" ng-class="{'progress-cursor-playing': ctrl.isPlaying}"></div>
         
         <div ng-click="ctrl.setStartPosition($event)">
           <div ng-repeat="trackLine in ctrl.trackLines">

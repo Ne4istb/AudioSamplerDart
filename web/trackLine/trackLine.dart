@@ -34,7 +34,7 @@ class TrackLineComponent {
 
     cells[index] = new TrackLineCell(sampleName, sampleHref);
     
-//    _scope.$emit('sampleAdded', [index, sampleHref]);
+    _scope.emit('sampleAdded', [index, sampleHref]);
   }
 
   bool _ctrlPressed;
@@ -53,7 +53,7 @@ class TrackLineComponent {
   
   void removeSample (int index){
     
-//    _scope.$emit('sampleRemoved', [index, cells[index].href]);
+    _scope.emit('sampleRemoved', [index, cells[index].href]);
     
     cells[index] = null;
   }

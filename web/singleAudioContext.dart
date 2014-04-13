@@ -7,8 +7,7 @@ import 'dart:typed_data';
 class SingleAudioContext {
 
   static AudioContext _audioContext = new AudioContext();
-  static final SingleAudioContext _singleton = new SingleAudioContext._internal(
-      );
+  static final SingleAudioContext _singleton = new SingleAudioContext._internal();
 
   factory SingleAudioContext() {
     return _singleton;
