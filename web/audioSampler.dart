@@ -7,10 +7,9 @@ import 'samples/samples.dart';
 
 import 'audioTrackService.dart';
 import 'audioTrack.dart';
-import 'package:uuid/uuid.dart';
-
 
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:html';
 import 'dart:convert' show JSON;
 
@@ -79,7 +78,12 @@ class AudioSamplerController {
 
   String _getClientId() {
     String id = window.localStorage[CLIENT_ID];
-    return id == null ? new UuidBase().v1() : id;
+    return id == null ? _generateId() : id;
+  }
+
+  String _generateId() {
+    var random = new math.Random();
+    return ((1 + random.nextDouble()) * 1000000).toInt().toString();
   }
 
   void _initTrackLines() {
@@ -250,10 +254,8 @@ class AudioSamplerController {
     var path = window.location.href;
     if (path.contains('#') && _trackOwner == _id)return path.split('#')[1];
 
-    return _generateTrackId();
+    return _generateId();
   }
-
-  String _generateTrackId() => new UuidBase().v1().hashCode.toString();
 
   void restoreTrack(Map json) {
 
