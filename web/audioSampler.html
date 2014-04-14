@@ -4,7 +4,7 @@
   <head>
     <title>Audio sampler using Dart</title>    
     <link href='http://fonts.googleapis.com/css?family=Share+Tech' rel='stylesheet' type='text/css'>
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.css" rel="stylesheet">
    
     <!-- Latest compiled and minified CSS -->   
     
@@ -18,12 +18,13 @@
       <div class="container clearfix">       
         <a class="navbar-brand" href="#" data-step="1" data-intro="Hi, it is audio sampler written on Dart. Let's go thourh introduction demo!">Audio sampler Dart</a>              
         <div class="top-controls">
+           <button class="btn save" ng-click="ctrl.save()">
+            <i class="icon-save"></i>
+          </button> 
           <button class="btn reset" ng-click="ctrl.resetTrack()">
             <i class="icon-undo"></i>
           </button>
-          <button class="btn save" ng-click="ctrl.save()">
-            <i class="icon-save"></i>
-          </button>                    
+                   
           <button class="btn help" onclick="javascript:introJs().start();">
             <i class="icon-question"></i>
           </button>
@@ -80,10 +81,10 @@
       <div class=container>
         <span>Ne4istb 2014</span>
         <div class="social-group">
-            <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="https://www.gstatic.com/images/icons/gplus-32.png"></share>
-            <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="http://static.batu.me/assets/img/icons/facebook-32x32.png"></share>
-            <share alt="Share on Vkontakte" href="http://vk.com/share.php?url=SHARE_URL" icon="http://vk.com/images/vk32.png"></share>
-            <share alt="Share on Twitter" href="https://twitter.com/share?url=SHARE_URL" icon="https://dev.twitter.com/sites/default/files/images_documentation/bird_blue_32.png"></share>
+            <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="icon-google-plus"></share>
+            <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="icon-facebook"></share>
+            <share alt="Share on Vkontakte" href="http://vk.com/share.php?url=SHARE_URL" icon="icon-vk"></share>
+            <share alt="Share on Twitter" href="https://twitter.com/share?url=SHARE_URL" icon="icon-twitter"></share>
         </div>  
       </div>
     </div>

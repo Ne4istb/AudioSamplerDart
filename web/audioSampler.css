@@ -120,7 +120,6 @@ BODY {
 
 .social-group {
   float: right;
-  margin: 10px 0 0 0;
 }
 
 .container {
@@ -157,7 +156,6 @@ BODY {
 .btn-bank:focus,
 .btn-bank:hover {
   outline: 3px solid #f5d049;
-  
 }
 
 .btn-bank:first-child {

@@ -6,7 +6,7 @@ import 'dart:html';
 @NgComponent(
     selector: 'share', 
     templateUrl: 'shareButton/shareButton.html', 
-    cssUrl: '',
+    cssUrl: 'shareButton/shareButton.css',
     publishAs: 'cmp')
 class ShareButtonComponent {
 
