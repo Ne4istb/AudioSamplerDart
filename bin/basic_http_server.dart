@@ -12,7 +12,6 @@ void main() {
     ..directoryHandler = (dir, request) {
       var indexUri = new Uri.file(dir.path).resolve('audioSampler.html');
       var uri = indexUri.toFilePath();
-      print(uri);
       staticFiles.serveFile(new File(uri), request);
     };
 
@@ -20,7 +19,7 @@ void main() {
   var port = portEnv == null ? 9999 : int.parse(portEnv);
 
   runZoned(() {
-    HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, port).then((server) {
+    HttpServer.bind(InternetAddress.ANY_IP_V4, port).then((server) {
       server.listen(staticFiles.serveRequest);
     });
   }, onError: (e, stackTrace) => print('Error: $e $stackTrace'));
