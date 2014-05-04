@@ -4,7 +4,7 @@ import 'package:http_server/http_server.dart' show VirtualDirectory;
 
 void main() {
   // Assumes the server lives in bin/ and that `pub build` ran.
-  var buildUri = Platform.script.resolve('../build');
+  var buildUri = Platform.script.resolve('../build/web');
 
   var staticFiles = new VirtualDirectory(buildUri.toFilePath());
   staticFiles
