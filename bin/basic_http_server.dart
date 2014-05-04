@@ -10,7 +10,7 @@ void main() {
   staticFiles
     ..allowDirectoryListing = true
     ..directoryHandler = (dir, request) {
-      var indexUri = new Uri.file(dir.path).resolve('audioSampler2.html');
+      var indexUri = new Uri.file(dir.path).resolve('audioSampler.html');
       var uri = indexUri.toFilePath();
       print(uri);
       staticFiles.serveFile(new File(uri), request);
