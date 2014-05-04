@@ -45,7 +45,7 @@
       
       <div class="controls-area">
         <div class="volume-control">
-          <input type="range" ng-change="ctrl.volumeLevelChanged($event)" min="0" max="200">
+          <input type="range" ng-change="ctrl.volumeLevelChanged($event)" ng-input="ctrl.volumeLevelChanged($event)" min="0" max="200">
         </div>
         
         <div class="controls">
