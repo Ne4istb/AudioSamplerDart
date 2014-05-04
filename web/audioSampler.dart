@@ -1,5 +1,6 @@
 import 'package:angular/angular.dart';
 import 'package:angular/application_factory.dart';
+import 'package:angular/animate/module.dart';
 
 import 'package:intl/intl.dart';
 
@@ -25,6 +26,8 @@ class AudioSamplerModule extends Module{
     type(ShareButtonComponent);
     type(AudioTrackService);
     type(TimerFilter);
+
+    install(new AnimationModule());
   }
 }
 

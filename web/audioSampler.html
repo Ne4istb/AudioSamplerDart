@@ -73,7 +73,7 @@
       </div>
       
       <div class="samplesContainer clearfix">
-        <div ng-repeat="sample in ctrl.samples | filter: ctrl.currentBankCategory">
+        <div ng-repeat="sample in ctrl.samples | filter: ctrl.currentBankCategory" class="samples-bank">
           <sample name="{{sample.name}}" href="{{sample.href}}"></sample>
         </div>
       </div>
