@@ -45,7 +45,9 @@
       
       <div class="controls-area">
         <div class="volume-control">
+          <div class="volume-label">Volume</div>
           <input type="range" ng-change="ctrl.volumeLevelChanged($event)" ng-input="ctrl.volumeLevelChanged($event)" min="0" max="200">
+          <output>{{ctrl.volumeLevel}}</output>
         </div>
         
         <div class="controls">

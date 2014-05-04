@@ -227,12 +227,15 @@ class AudioSamplerController {
     });
   }
 
+
+  int volumeLevel = 100;
   void volumeLevelChanged(Event event) {
 
     String value = (event.target as dynamic).value;
+    volumeLevel = value;
     num level = int.parse(value) / 100;
 
-    if (_audioTrack != null)_audioTrack.setVolumeLevel(level);
+    if (_audioTrack != null) _audioTrack.setVolumeLevel(level);
   }
 
 
