@@ -3,7 +3,7 @@ library shareButton;
 import 'package:angular/angular.dart';
 import 'dart:html';
 
-@NgComponent(
+@Component(
     selector: 'share', 
     templateUrl: 'shareButton/shareButton.html', 
     cssUrl: 'shareButton/shareButton.css',

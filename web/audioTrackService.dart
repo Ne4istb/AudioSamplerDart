@@ -3,7 +3,7 @@ library audioTrackService;
 import 'package:angular/angular.dart';
 import 'dart:async';
 
-@NgInjectableService()
+@Injectable()
 class AudioTrackService {
   
   final String URL = 'https://api.mongolab.com/api/1/databases/audio_sampler/collections/track';

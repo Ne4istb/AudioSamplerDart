@@ -4,7 +4,7 @@ import 'package:angular/angular.dart';
 import 'dart:html';
 import 'dart:convert' show JSON;
 
-@NgComponent(
+@Component(
     selector: 'track', 
     templateUrl: 'trackLine/trackLine.html', 
     cssUrl: 'trackLine/trackLine.css', 

@@ -1,5 +1,8 @@
 import 'package:angular/angular.dart';
+import 'package:angular/application_factory.dart';
+
 import 'package:intl/intl.dart';
+
 import 'trackLine/trackLine.dart';
 import 'sample/sample.dart';
 import 'shareButton/shareButton.dart';
@@ -13,21 +16,25 @@ import 'dart:math' as math;
 import 'dart:html';
 import 'dart:convert' show JSON;
 
-@MirrorsUsed(targets: const ['trackLine', 'sample'], metaTargets: const[TrackLineCell, Sample], override: '*')
-import 'dart:mirrors';
 
-
-void main() {
-  ngBootstrap(module: new Module()
-    ..type(AudioSamplerController)
-    ..type(TrackLineComponent)
-    ..type(SampleComponent)
-    ..type(ShareButtonComponent)
-    ..type(AudioTrackService)
-    ..type(TimerFilter));
+class AudioSamplerModule extends Module{
+  AudioSamplerModule() {
+    type(AudioSamplerController);
+    type(TrackLineComponent);
+    type(SampleComponent);
+    type(ShareButtonComponent);
+    type(AudioTrackService);
+    type(TimerFilter);
+  }
 }
 
-@NgFilter(name:'timerFilter')
+main() {
+  applicationFactory()
+    .addModule(new AudioSamplerModule())
+    .run();
+}
+
+@Formatter(name:'timerFilter')
 class TimerFilter {
   call(num value) {
 
@@ -45,7 +52,7 @@ class TimerFilter {
   }
 }
 
-@NgController(selector: '[audioSampler]', publishAs: 'ctrl')
+@Controller(selector: '[audioSampler]', publishAs: 'ctrl')
 class AudioSamplerController {
 
   final String CLIENT_ID = 'clientId';

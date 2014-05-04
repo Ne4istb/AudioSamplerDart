@@ -6,7 +6,7 @@ import 'dart:html';
 import 'dart:async';
 import 'dart:web_audio';
 
-@NgComponent(selector: 'sample', templateUrl: 'sample/sample.html', cssUrl:
+@Component(selector: 'sample', templateUrl: 'sample/sample.html', cssUrl:
     'sample/sample.css', publishAs: 'cmp')
 class SampleComponent {
   @NgAttr('id')
