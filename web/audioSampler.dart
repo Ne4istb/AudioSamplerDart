@@ -166,6 +166,8 @@ class AudioSamplerController {
     isPlaying = false;
     _playTimer.cancel();
 
+    time = 0;
+
     cursorPosition = START_POSITION;
     _setCursorStyle();
   }
@@ -224,14 +226,18 @@ class AudioSamplerController {
 
     _playTimer = new Timer(new Duration(milliseconds: 100), () {
 
-      if (_audioTrack != null)time = _audioTrack.currentTime;
+      if (_audioTrack != null && isPlaying)
+        time = _audioTrack.currentTime;
+
+      if(time > 79.5)
+        stop();
 
       runPlayTimer();
     });
   }
 
 
-  int volumeLevel = 100;
+  String volumeLevel = '100';
   void volumeLevelChanged(Event event) {
 
     String value = (event.target as dynamic).value;
