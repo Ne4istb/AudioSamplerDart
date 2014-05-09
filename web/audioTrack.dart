@@ -97,6 +97,10 @@ class AudioTrack {
     stop();
   }
 
+  void moveTo (num step){
+    _startOffset = _startOffset + step;
+  }
+
   double get currentTime => new SingleAudioContext().currentTime - _startTime;
 
   void stop() {

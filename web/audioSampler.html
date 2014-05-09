@@ -51,11 +51,11 @@
         </div>
         
         <div class="controls">
-          <button class="btn back">Back</button>
+          <button class="btn back" ng-click="ctrl.stepBack()">Back</button>
           <button class="btn pause" ng-click="ctrl.pause()">Pause</button>
           <button class="btn play" ng-click="ctrl.play()" >Play</button>
           <button class="btn stop" ng-click="ctrl.stop()">Stop</button>
-          <button class="btn forward">Forward</button>                   
+          <button class="btn forward" ng-click="ctrl.stepForward()">Forward</button>
         </div>
       
         <div class="timer">

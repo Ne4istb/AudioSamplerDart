@@ -142,7 +142,6 @@ class AudioSamplerController {
           _audioTrack.addSample(new Sample(trackLine[i].href), i * SAMPLE_DURATION);
         }
       }
-      ;
     });
 
     _audioTrack.onPlay.listen((_) {
@@ -181,6 +180,35 @@ class AudioSamplerController {
 
     isPlaying = false;
     _playTimer.cancel();
+
+    cursorPosition = _cursorTimeToPosition;
+    _setCursorStyle();
+  }
+
+  void stepBack(){
+    _step(-SAMPLE_DURATION);
+  }
+
+  void stepForward(){
+    _step(SAMPLE_DURATION);
+  }
+
+  void _step(num step) {
+
+    if (_audioTrack == null) return;
+
+    if(step*-1 > _audioTrack.currentTime){
+      stop();
+      play();
+      return;
+    }
+
+
+    if (isPlaying) _audioTrack.pause();
+
+    _audioTrack.moveTo(step);
+
+    if (isPlaying) _audioTrack.play();
 
     cursorPosition = _cursorTimeToPosition;
     _setCursorStyle();
