@@ -292,8 +292,7 @@ input[type='range']::-moz-range-thumb {
 }
 
 .samples-bank.ng-enter{
-    transition-delay: 1s;
-    transition: all 1s;
+    transition: all 1s linear 1s;
     opacity: 0;
 }
 
