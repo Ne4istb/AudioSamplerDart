@@ -292,7 +292,8 @@ input[type='range']::-moz-range-thumb {
 }
 
 .samples-bank.ng-enter{
-    transition: all 3000ms;
+    transition-delay: 1s;
+    transition: all 1s;
     opacity: 0;
 }
 
@@ -301,12 +302,10 @@ input[type='range']::-moz-range-thumb {
 }
 
 .samples-bank.ng-leave{
-    transition: all 1000ms;
-    -webkit-transition: scale(1.0,1.0);
+    transition: all 1s;
     opacity: 1;
 }
 
 .samples-bank.ng-leave{
-    -webkit-transition: scale(1.1,1.1);
     opacity: 0;
 }
