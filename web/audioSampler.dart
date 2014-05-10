@@ -163,7 +163,8 @@ class AudioSamplerController {
     _audioTrack = null;
 
     isPlaying = false;
-    _playTimer.cancel();
+    if (_playTimer !=null)
+      _playTimer.cancel();
 
     time = 0;
 
@@ -186,23 +187,36 @@ class AudioSamplerController {
   }
 
   void stepBack(){
+
+    if (_audioTrack == null) return;
+
+    if(SAMPLE_DURATION > _audioTrack.pauseTime){
+      var continuePlaying = isPlaying;
+      stop();
+
+      if (continuePlaying)
+        play();
+
+      return;
+    }
+
     _step(-SAMPLE_DURATION);
   }
 
   void stepForward(){
+
+    if (_audioTrack == null) return;
+
+    if(_audioTrack.pauseTime >= TRACK_LENGTH - SAMPLE_DURATION ){
+      pause();
+      _step(TRACK_LENGTH - _audioTrack.pauseTime);
+      return;
+    }
+
     _step(SAMPLE_DURATION);
   }
 
   void _step(num step) {
-
-    if (_audioTrack == null) return;
-
-    if(step*-1 > _audioTrack.currentTime){
-      stop();
-      play();
-      return;
-    }
-
 
     if (isPlaying) _audioTrack.pause();
 
