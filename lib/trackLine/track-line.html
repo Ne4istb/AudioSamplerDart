@@ -1,0 +1,17 @@
+<div class="line clearfix">
+    <div class="label">{{label}}</div>
+    <div class="workspace" > 
+        <div ng-repeat="cell in cells track by $index">
+          <div class="cell" ng-dragover="allowDrop($event)" ng-drop="drop($event, $index)">
+            <sample class="sample-in-track" 
+                    id="sample_{{number}}_{{$index}}"
+                    ng-if="cell!=null" 
+                    name="{{cell.sampleName}}" 
+                    href="{{cell.href}}"
+                    onItemDragged="onItemDragged($index)"
+                    onRightClick="removeSample($index)"></sample>
+          </div>
+           
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+HTML,
+BODY {
+    height: 100%;
+}
+
+BODY {
+    font-family: 'Share Tech', sans-serif;
+    font-size: 16px;
+}

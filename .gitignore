@@ -6,3 +6,6 @@ packages
 *.deps
 *.map
 /.idea
+.pub
+
+.idea
