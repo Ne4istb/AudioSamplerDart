@@ -24,7 +24,8 @@ import 'dart:convert' show JSON;
 @Component(
 	selector: 'audio-sampler',
 	templateUrl: 'sampler.html',
-	cssUrl: 'sampler.css')
+	cssUrl: 'sampler.css',
+	useShadowDom: false)
 class AudioSamplerComponent implements ScopeAware {
 
 	final String CLIENT_ID = 'clientId';

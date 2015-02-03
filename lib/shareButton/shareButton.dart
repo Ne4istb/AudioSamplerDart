@@ -6,7 +6,8 @@ import 'dart:html';
 @Component(
 	selector: 'share',
 	templateUrl: 'share-button.html',
-	cssUrl: 'shareButton.css')
+	cssUrl: 'shareButton.css',
+	useShadowDom: false)
 class ShareButtonComponent {
 
 	@NgAttr('href')
