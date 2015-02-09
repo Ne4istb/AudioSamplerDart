@@ -1,0 +1,4 @@
+version: lustrous-stack-850
+runtime: custom
+vm: true
+api_version: 1
