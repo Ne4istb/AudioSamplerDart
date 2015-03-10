@@ -9,3 +9,6 @@ packages
 .pub
 
 .idea
+
+/key
+/key.pub
