@@ -1,23 +1,22 @@
 library trackLine;
 
-import 'package:angular/angular.dart';
+import 'package:angular2/core.dart';
 import 'dart:html';
 import 'dart:convert' show JSON;
 
 @Component(
 	selector: 'track',
 	templateUrl: 'track-line.html',
-	cssUrl: 'trackLine.css')
-class TrackLineComponent implements ScopeAware {
+	styleUrls: const['trackLine.css'])
+class TrackLineComponent {
 
 	Scope scope;
 
-	@NgAttr('number')
-	String number;
+	@Input() String number;
 
 	String get label => "Track " + number;
 
-	@NgTwoWay('cells')
+	@Input()
 	List<TrackLineCell> cells;
 
 	TrackLineComponent();
@@ -36,7 +35,7 @@ class TrackLineComponent implements ScopeAware {
 
 		cells[index] = new TrackLineCell(sampleName, sampleHref);
 
-		scope.emit('sampleAdded', [index, sampleHref]);
+		//scope.emit('sampleAdded', [index, sampleHref]);
 	}
 
 	bool _ctrlPressed;
@@ -56,7 +55,7 @@ class TrackLineComponent implements ScopeAware {
 
 	void removeSample(int index) {
 
-		scope.emit('sampleRemoved', [index, cells[index].href]);
+//		scope.emit('sampleRemoved', [index, cells[index].href]);
 
 		cells[index] = null;
 	}

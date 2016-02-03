@@ -1,6 +1,6 @@
 library sampler;
 
-import 'package:angular/angular.dart';
+import 'package:angular2/core.dart';
 
 import 'package:audioSampler/audioTrackService.dart';
 import 'package:audioSampler/trackLine/trackLine.dart';
@@ -22,301 +22,269 @@ import 'dart:html' as html;
 import 'dart:convert' show JSON;
 
 @Component(
-	selector: 'audio-sampler',
-	templateUrl: 'sampler.html',
-	cssUrl: 'sampler.css',
-	useShadowDom: false)
-class AudioSamplerComponent implements ScopeAware {
-
-	final String CLIENT_ID = 'clientId';
-	final num SAMPLE_DURATION = 5.3;
+  selector: 'audio-sampler',
+  templateUrl: 'sampler.html',
+  directives: const[TrackLineComponent],
+  styleUrls: const ['sampler.css'])
+class AudioSamplerComponent {
+  final String CLIENT_ID = 'clientId';
+  final num SAMPLE_DURATION = 5.3;
+
+  static int START_POSITION = 99;
+  static int SAMPLE_WIDTH = 71;
+  static int TRACK_LINE_WIDTH = 1065;
+  static num TRACK_LENGTH = 79.5;
+
+  var samples = new SamplesLib().list;
+
+  List<List<TrackLineCell>> trackLines = [];
+
+  AudioTrackService _audioTrackService;
+  String _id;
+  String _trackOwner;
+
+  AudioSamplerComponent(this._audioTrackService) {
+    _id = _getClientId();
+    _initTrackLines();
+
+    html.window.onKeyDown.listen(onKeyPress);
+  }
+
+  void set scope(Scope scope) {
+//		scope.on('sampleAdded').listen(onSampleAdded);
+//		scope.on('sampleRemoved').listen(onSampleRemoved);
+  }
+
+  String _getClientId() {
+    String id = html.window.localStorage[CLIENT_ID];
+    return id == null ? _generateId() : id;
+  }
+
+  String _generateId() {
+    var random = new math.Random();
+    return ((1 + random.nextDouble()) * 1000000).toInt().toString();
+  }
 
-	static int START_POSITION = 99;
-	static int SAMPLE_WIDTH = 71;
-	static int TRACK_LINE_WIDTH = 1065;
-	static num TRACK_LENGTH = 79.5;
+  void _initTrackLines() {
+    //TODO Simplify it using path on production
+    var path = html.window.location.href;
 
-	var samples = new SamplesLib().list;
+    if (path.contains('#')) {
+      var trackId = path.split('#')[1];
+
+      _audioTrackService.loadData(trackId).then(restoreTrack).catchError((_) => resetTrack());
+    } else {
+      resetTrack();
+    }
+  }
 
-	List<List<TrackLineCell>> trackLines = [];
+  var bankCategories = ['Beat', 'Bass', 'Guitar', 'Effect', 'Keys', 'Jungle'];
+  String currentBankCategory = 'Beat';
 
-	AudioTrackService _audioTrackService;
-	String _id;
-	String _trackOwner;
+//	void onSampleAdded(ScopeEvent event) {
+//		if (_audioTrack != null) {
+//			_audioTrack.addSample(new Sample(event.data[1]), event.data[0] * SAMPLE_DURATION);
+//		}
+//	}
+//
+//	void onSampleRemoved(ScopeEvent event) {
+//		if (_audioTrack != null) {
+//			_audioTrack.removeSample(new Sample(event.data[1]), event.data[0] * SAMPLE_DURATION);
+//		}
+//	}
 
-	Http _http;
+  bool isPlaying = false;
+  AudioTrack _audioTrack;
 
-	AudioSamplerComponent(this._audioTrackService) {
+  void play() {
+    if (isPlaying) return;
 
-		_id = _getClientId();
-		_initTrackLines();
+    if (_audioTrack == null) _audioTrack = new AudioTrack();
+    else _audioTrack.clear();
 
-		html.window.onKeyDown.listen(onKeyPress);
-	}
+    trackLines.forEach((trackLine) {
+      for (var i = 0; i < trackLine.length; i++) {
+        if (trackLine[i] != null) {
+          _audioTrack.addSample(new Sample(trackLine[i].href), i * SAMPLE_DURATION);
+        }
+      }
+    });
 
-	void set scope(Scope scope) {
-		scope.on('sampleAdded').listen(onSampleAdded);
-		scope.on('sampleRemoved').listen(onSampleRemoved);
-	}
+    _audioTrack.onPlay.listen((_) {
+      _setCursorStyle(timeToEnd: TRACK_LENGTH - _audioTrack.pauseTime);
+      isPlaying = true;
+      runPlayTimer();
+    });
 
-	String _getClientId() {
-		String id = html.window.localStorage[CLIENT_ID];
-		return id == null ? _generateId() : id;
-	}
+    _audioTrack.play();
+  }
 
-	String _generateId() {
-		var random = new math.Random();
-		return ((1 + random.nextDouble()) * 1000000).toInt().toString();
-	}
+  var cursorPosition = START_POSITION;
 
-	void _initTrackLines() {
-		//TODO Simplify it using path on production
-		var path = html.window.location.href;
+  void stop() {
+    if (_audioTrack == null) return;
 
-		if (path.contains('#')) {
-			var trackId = path.split('#')[1];
+    _audioTrack.stop();
+    _audioTrack = null;
 
-			_audioTrackService.loadData(trackId).then(restoreTrack).catchError((_) => resetTrack());
-		}
-		else {
-			resetTrack();
-		}
-	}
+    isPlaying = false;
+    if (_playTimer != null) _playTimer.cancel();
 
-	var bankCategories = ['Beat', 'Bass', 'Guitar', 'Effect', 'Keys', 'Jungle'];
-	String currentBankCategory = 'Beat';
+    time = 0;
 
-	void onSampleAdded(ScopeEvent event) {
-		if (_audioTrack != null) {
-			_audioTrack.addSample(new Sample(event.data[1]), event.data[0] * SAMPLE_DURATION);
-		}
-	}
+    cursorPosition = START_POSITION;
+    _setCursorStyle();
+  }
 
-	void onSampleRemoved(ScopeEvent event) {
-		if (_audioTrack != null) {
-			_audioTrack.removeSample(new Sample(event.data[1]), event.data[0] * SAMPLE_DURATION);
-		}
-	}
+  void pause() {
+    if (_audioTrack == null || !isPlaying) return;
 
-	bool isPlaying = false;
-	AudioTrack _audioTrack;
+    _audioTrack.pause();
 
-	void play() {
+    isPlaying = false;
+    _playTimer.cancel();
 
-		if (isPlaying) return;
+    cursorPosition = _cursorTimeToPosition;
+    _setCursorStyle();
+  }
 
-		if (_audioTrack == null)
-			_audioTrack = new AudioTrack();
-		else
-			_audioTrack.clear();
+  void stepBack() {
+    if (_audioTrack == null) return;
 
-		trackLines.forEach((trackLine) {
-			for (var i = 0; i < trackLine.length; i++) {
-				if (trackLine[i] != null) {
-					_audioTrack.addSample(new Sample(trackLine[i].href), i * SAMPLE_DURATION);
-				}
-			}
-		});
+    if (SAMPLE_DURATION > _audioTrack.pauseTime) {
+      var continuePlaying = isPlaying;
+      stop();
 
-		_audioTrack.onPlay.listen((_) {
-			_setCursorStyle(timeToEnd: TRACK_LENGTH - _audioTrack.pauseTime);
-			isPlaying = true;
-			runPlayTimer();
-		});
+      if (continuePlaying) play();
 
-		_audioTrack.play();
-	}
+      return;
+    }
 
-	var cursorPosition = START_POSITION;
+    _step(-SAMPLE_DURATION);
+  }
 
-	void stop() {
+  void stepForward() {
+    if (_audioTrack == null) return;
 
-		if (_audioTrack == null) return;
+    if (_audioTrack.pauseTime >= TRACK_LENGTH - SAMPLE_DURATION) {
+      pause();
+      _step(TRACK_LENGTH - _audioTrack.pauseTime);
+      return;
+    }
 
-		_audioTrack.stop();
-		_audioTrack = null;
+    _step(SAMPLE_DURATION);
+  }
 
-		isPlaying = false;
-		if (_playTimer != null)
-			_playTimer.cancel();
+  void _step(num step) {
+    if (isPlaying) _audioTrack.pause();
 
-		time = 0;
+    _audioTrack.moveTo(step);
 
-		cursorPosition = START_POSITION;
-		_setCursorStyle();
-	}
+    if (isPlaying) _audioTrack.play();
 
-	void pause() {
+    cursorPosition = _cursorTimeToPosition;
+    _setCursorStyle();
+  }
 
-		if (_audioTrack == null || !isPlaying)
-			return;
+  num get _cursorTimeToPosition => _audioTrack.pauseTime * (TRACK_LINE_WIDTH / TRACK_LENGTH) + START_POSITION;
 
-		_audioTrack.pause();
+  num get _cursorPositionToTime => (cursorPosition - START_POSITION) / TRACK_LINE_WIDTH * TRACK_LENGTH;
 
-		isPlaying = false;
-		_playTimer.cancel();
+  void setStartPosition(html.MouseEvent e) {
+    if (isPlaying) return;
 
-		cursorPosition = _cursorTimeToPosition;
-		_setCursorStyle();
-	}
+    cursorPosition = e.client.x - (e.currentTarget as html.Node).parent.parent.offsetLeft;
+    _setCursorStyle();
 
-	void stepBack() {
+    _audioTrack = new AudioTrack()..pauseTime = time = _cursorPositionToTime;
+  }
 
-		if (_audioTrack == null) return;
+  String cursorStyle = "left: " + START_POSITION.toString() + "px;";
 
-		if (SAMPLE_DURATION > _audioTrack.pauseTime) {
-			var continuePlaying = isPlaying;
-			stop();
+  void _setCursorStyle({num timeToEnd: 0}) {
+    cursorStyle = "left: " + cursorPosition.toString() + "px; ";
+    if (timeToEnd > 0) cursorStyle += "-webkit-animation: rightThenLeft " + timeToEnd.toString() + "s linear;";
+  }
 
-			if (continuePlaying)
-				play();
+  void onKeyPress(html.KeyboardEvent e) {
+    const int SPACE_KEY = 32;
 
-			return;
-		}
+    if (e.keyCode != SPACE_KEY) return;
 
-		_step(-SAMPLE_DURATION);
-	}
+    if (isPlaying) pause();
+    else play();
+  }
 
-	void stepForward() {
+  Timer _playTimer;
+  num time = 0;
 
-		if (_audioTrack == null) return;
+  void runPlayTimer() {
+    _playTimer = new Timer(new Duration(milliseconds: 100), () {
+      if (_audioTrack != null && isPlaying) time = _audioTrack.currentTime;
 
-		if (_audioTrack.pauseTime >= TRACK_LENGTH - SAMPLE_DURATION) {
-			pause();
-			_step(TRACK_LENGTH - _audioTrack.pauseTime);
-			return;
-		}
+      if (time > 79.5) stop();
 
-		_step(SAMPLE_DURATION);
-	}
+      runPlayTimer();
+    });
+  }
 
-	void _step(num step) {
+  String volumeLevel = '100';
 
-		if (isPlaying) _audioTrack.pause();
+  void volumeLevelChanged(html.Event event) {
+    String value = (event.target as dynamic).value;
+    volumeLevel = value;
+    num level = int.parse(value) / 100;
 
-		_audioTrack.moveTo(step);
+    if (_audioTrack != null) _audioTrack.setVolumeLevel(level);
+  }
 
-		if (isPlaying) _audioTrack.play();
+  void save() {
+    var trackId = _getTrackId();
 
-		cursorPosition = _cursorTimeToPosition;
-		_setCursorStyle();
-	}
+    Map data = new Map()
+      ..['_id'] = trackId
+      ..['owner'] = _id
+      ..['data'] = trackLines;
 
-	num get _cursorTimeToPosition => _audioTrack.pauseTime * (TRACK_LINE_WIDTH / TRACK_LENGTH) + START_POSITION;
+    String json = JSON.encode(data, toEncodable: (pattern) {
+      return (pattern as TrackLineCell).toJson();
+    });
 
-	num get _cursorPositionToTime => (cursorPosition - START_POSITION) / TRACK_LINE_WIDTH * TRACK_LENGTH;
+    html.window.localStorage[CLIENT_ID] = _id;
 
-	void setStartPosition(html.MouseEvent e) {
+    _audioTrackService.saveData(json).then((_) {
+      html.window.location.replace(html.window.location.pathname + '#$trackId');
+    });
+  }
 
-		if (isPlaying) return;
+  String _getTrackId() {
+    var path = html.window.location.href;
+    if (path.contains('#') && _trackOwner == _id) return path.split('#')[1];
 
-		cursorPosition = e.client.x - (e.currentTarget as html.Node).parent.parent.offsetLeft;
-		_setCursorStyle();
+    return _generateId();
+  }
 
-		_audioTrack = new AudioTrack()
-			..pauseTime = time = _cursorPositionToTime;
-	}
+  void restoreTrack(Map json) {
+    _trackOwner = json['owner'];
 
-	String cursorStyle = "left: " + START_POSITION.toString() + "px;";
+    trackLines.clear();
 
-	void _setCursorStyle({num timeToEnd : 0}) {
-		cursorStyle = "left: " + cursorPosition.toString() + "px; ";
-		if (timeToEnd > 0) cursorStyle += "-webkit-animation: rightThenLeft " + timeToEnd.toString() + "s linear;";
-	}
+    (json['data'] as List).forEach((trackLine) {
+      List value = [];
+      (trackLine as List).forEach((cell) {
+        value.add(cell == null ? null : new TrackLineCell.fromJSON(cell));
+      });
 
-	void onKeyPress(html.KeyboardEvent e) {
+      trackLines.add(value);
+    });
+  }
 
-		const int SPACE_KEY = 32;
+  void resetTrack() {
+    trackLines.clear();
 
-		if (e.keyCode != SPACE_KEY) return;
-
-		if (isPlaying)
-			pause();
-		else
-			play();
-	}
-
-	Timer _playTimer;
-	num time = 0;
-
-	void runPlayTimer() {
-
-		_playTimer = new Timer(new Duration(milliseconds: 100), () {
-
-			if (_audioTrack != null && isPlaying)
-				time = _audioTrack.currentTime;
-
-			if (time > 79.5)
-				stop();
-
-			runPlayTimer();
-		});
-	}
-
-
-	String volumeLevel = '100';
-
-	void volumeLevelChanged(html.Event event) {
-
-		String value = (event.target as dynamic).value;
-		volumeLevel = value;
-		num level = int.parse(value) / 100;
-
-		if (_audioTrack != null) _audioTrack.setVolumeLevel(level);
-	}
-
-
-	void save() {
-
-		var trackId = _getTrackId();
-
-		Map data = new Map()
-			..['_id'] = trackId
-			..['owner'] = _id
-			..['data'] = trackLines;
-
-		String json = JSON.encode(data, toEncodable: (pattern) {
-			return (pattern as TrackLineCell).toJson();
-		});
-
-		html.window.localStorage[CLIENT_ID] = _id;
-
-		_audioTrackService.saveData(json).then((_) {
-			html.window.location.replace(html.window.location.pathname + '#$trackId');
-		});
-	}
-
-	String _getTrackId() {
-
-		var path = html.window.location.href;
-		if (path.contains('#') && _trackOwner == _id)return path.split('#')[1];
-
-		return _generateId();
-	}
-
-	void restoreTrack(Map json) {
-
-		_trackOwner = json['owner'];
-
-		trackLines.clear();
-
-		(json['data'] as List).forEach((trackLine) {
-			List value = [];
-			(trackLine as List).forEach((cell) {
-				value.add(cell == null ? null : new TrackLineCell.fromJSON(cell));
-			});
-
-			trackLines.add(value);
-		});
-	}
-
-	void resetTrack() {
-
-		trackLines.clear();
-
-		for (var i = 0; i < 5; i++) {
-			var value = new List<TrackLineCell>.filled(15, null);
-			trackLines.add(value);
-		}
-	}
+    for (var i = 0; i < 5; i++) {
+      var value = new List<TrackLineCell>.filled(15, null);
+      trackLines.add(value);
+    }
+  }
 }

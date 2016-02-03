@@ -4,14 +4,14 @@
         <div class="container clearfix">
             <a class="navbar-brand" href="/" data-step="1" data-intro="Hi, it is audio sampler written on Dart. Let's go thourh introduction demo!">Audio sampler Dart</a>
             <div class="top-controls">
-                <button class="btn save" ng-click="save()" title="save" data-step="9" data-intro="You can save your track..">
+                <button class="btn save" (click)="save()" title="save" data-step="9" data-intro="You can save your track..">
                     <i class="icon-save"></i>
                 </button>
-                <button class="btn reset" ng-click="resetTrack()" title="Reset" data-step="10" data-intro="..or fully clear sampler area.">
+                <button class="btn reset" (click)="resetTrack()" title="Reset" data-step="10" data-intro="..or fully clear sampler area.">
                     <i class="icon-undo"></i>
                 </button>
 
-                <button class="btn help" title="Help"  onclick="javascript:introJs().start();">
+                <button class="btn help" title="Help" onclick="javascript:introJs().start();">
                     <i class="icon-question"></i>
                 </button>
             </div>
@@ -20,28 +20,26 @@
 
     <div class="container" data-step="8" data-intro="Now lets try to create track. Drag&Drop any sample(s) from samples area to sampler. You can move samples inside sampler via Drag&Drop. To remove sample from track press right mouse button. To copy sample hold Ctrl and Drag&Drop sample. To listen use play controls.">
         <div class="track-area" data-step="4" data-intro="It is sampler. here you can combine different samples to create your own track.">
-            <div class="progressCursor" style="{{cursorStyle}}" ng-class="{'progress-cursor-playing': isPlaying}"></div>
+            <div class="progressCursor" [style]="cursorStyle" [ngClass]="{'progress-cursor-playing': isPlaying}"></div>
 
-            <div ng-click="setStartPosition($event)">
-                <div ng-repeat="trackLine in trackLines">
-                    <track number="{{$index + 1}}" cells="trackLine"></track>
-                </div>
+            <div (click)="setStartPosition($event)">
+                <track *ngFor="#trackLine of trackLines" [number]="$index + 1" [(cells)]="trackLine"></track>
             </div>
         </div>
 
         <div class="controls-area" data-position="top" data-step="5" data-intro="It is controls area.">
             <div class="volume-control" data-step="6" data-position="top" data-intro="Volume">
                 <div class="volume-label">Volume</div>
-                <input type="range" ng-change="volumeLevelChanged($event)" ng-input="volumeLevelChanged($event)" min="0" max="200">
+                <input type="range" (change)="volumeLevelChanged($event)" (input)="volumeLevelChanged($event)" min="0" max="200">
                 <output>{{volumeLevel}}</output>
             </div>
 
             <div class="controls" data-step="7" data-position="top" data-intro="Play controls. Here is play, pause, stop, step back and step forward controls.">
-                <button class="btn back" ng-click="stepBack()">Back</button>
-                <button class="btn pause" ng-click="pause()">Pause</button>
-                <button class="btn play" ng-click="play()">Play</button>
-                <button class="btn stop" ng-click="stop()" >Stop</button>
-                <button class="btn forward" ng-click="stepForward()">Forward</button>
+                <button class="btn back" (click)="stepBack()">Back</button>
+                <button class="btn pause" (click)="pause()">Pause</button>
+                <button class="btn play" (click)="play()">Play</button>
+                <button class="btn stop" (click)="stop()" >Stop</button>
+                <button class="btn forward" (click)="stepForward()">Forward</button>
             </div>
 
             <div class="timer">
@@ -52,15 +50,15 @@
 
         <div class="sound-banks" data-step="2" data-intro="It is sound bank, where you can select samples for your track. Select tab by category" data-position='top'>
             <button class="btn-bank"
-                    ng-repeat="bank in bankCategories"
-                    ng-click="currentBankCategory = bank">
+                    *ngFor="#bank of bankCategories"
+                    (click)="currentBankCategory = bank">
                 {{bank}}
             </button>
         </div>
 
         <div class="samplesContainer clearfix" data-position="top" data-step="3" data-intro="Here you can select samples for your track. Double click on any to listen it.">
-            <div ng-repeat="sample in samples | filter: currentBankCategory" class="samples-bank">
-                <sample name="{{sample.name}}" href="{{sample.href}}"></sample>
+            <div *ngFor="#sample of samples | filter: currentBankCategory" class="samples-bank">
+                <sample [name]="sample.name" [href]="sample.href"></sample>
             </div>
         </div>
     </div>
@@ -69,10 +67,10 @@
         <div class=container>
             <span>Ne4istb 2014</span>
             <div class="social-group" data-step="11" data-position="top" data-intro="When you saved your track share it with friends!">
-                <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="icon-google-plus"></share>
-                <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="icon-facebook"></share>
-                <share alt="Share on Twitter" href="https://twitter.com/share?url=SHARE_URL" icon="icon-twitter"></share>
-                <share alt="Share on Vkontakte" href="http://vk.com/share.php?url=SHARE_URL" icon="icon-vk"></share>
+                <share [alt]="Share on Google+" [href]="https://plus.google.com/share?url=SHARE_URL" [icon]="icon-google-plus"></share>
+                <share [alt]="Share on Facebook" [href]="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" [icon]="icon-facebook"></share>
+                <share [alt]="Share on Twitter" [href]="https://twitter.com/share?url=SHARE_URL" [icon]="icon-twitter"></share>
+                <share [alt]="Share on Vkontakte" [href]="http://vk.com/share.php?url=SHARE_URL" [icon]="icon-vk"></share>
             </div>
         </div>
     </div>

@@ -2,10 +2,10 @@
 <div  class="sample"
       id="{{id}}"
       draggable="true"
-      ng-dragstart="drag($event)"
-      ng-dragend="dragEnd($event)"
-      ng-doubleclick="playSample()"
-      ng-contextmenu="onContextMenu($event)"
+      (dragstart)="drag($event)"
+      (dragend)="dragEnd($event)"
+      (doubleclick)="playSample()"
+      (contextmenu)="onContextMenu($event)"
       style="background: linear-gradient(to top, {{getColors()}});">
       {{name}}
 </div>

@@ -1,141 +1,122 @@
 library sample;
 
-import 'package:angular/angular.dart';
+import 'package:angular2/core.dart';
 import 'dart:html';
 import 'dart:async';
 import 'dart:web_audio';
 
 import 'package:audioSampler/singleAudioContext.dart';
 
-@Component(
-	selector: 'sample',
-	templateUrl: 'sample.html',
-	cssUrl: 'sample.css')
+@Component(selector: 'sample', templateUrl: 'sample.html', styleUrls: const ['sample.css'])
 class SampleComponent {
-	@NgAttr('id')
-	String id;
+  String id;
+  @Input() String name;
+  @Input() String href;
 
-	@NgAttr('name')
-	String name;
+  var onItemDragged;
+  var onRightClick;
 
-	@NgAttr('href')
-	String href;
+  SingleAudioContext _audioContext;
 
-	@NgCallback('onItemDragged')
-	var onItemDragged;
+  SampleComponent() {
+    _audioContext = new SingleAudioContext();
+  }
 
-	@NgCallback('onRightClick')
-	var onRightClick;
+  void drag(MouseEvent e) {
+    e.dataTransfer.setData('id', (e.currentTarget as Element).id);
+    e.dataTransfer.setData('SampleName', name);
+    e.dataTransfer.setData('SampleHref', href);
+  }
 
-	SingleAudioContext _audioContext;
+  void dragEnd(MouseEvent e) {
+    onItemDragged();
+  }
 
-	SampleComponent() {
-		_audioContext = new SingleAudioContext();
-	}
+  void onContextMenu(Event e) {
+    onRightClick();
+    e.preventDefault();
+  }
 
-	void drag(MouseEvent e) {
-		e.dataTransfer.setData('id', (e.currentTarget as Element).id);
-		e.dataTransfer.setData('SampleName', name);
-		e.dataTransfer.setData('SampleHref', href);
-	}
+  void playSample() {
+    new SingleAudioContext().stopAll();
+    new Sample(href).play();
+  }
 
-	void dragEnd(MouseEvent e) {
-		onItemDragged();
-	}
+  String getColors() {
+    if (href.contains("beat")) return '#3F3EE5, #3E93E5';
 
-	void onContextMenu(Event e) {
-		onRightClick();
-		e.preventDefault();
-	}
+    if (href.contains("key")) return '#97218D, #D86FCF';
 
-	void playSample() {
-		new SingleAudioContext().stopAll();
-		new Sample(href).play();
-	}
+    if (href.contains("guitar")) return '#E5983E, #DBAC75';
 
-	String getColors() {
-		if (href.contains("beat")) return '#3F3EE5, #3E93E5';
+    if (href.contains("bass")) return '#2B4C20, #4F9C35';
 
-		if (href.contains("key")) return '#97218D, #D86FCF';
-
-		if (href.contains("guitar")) return '#E5983E, #DBAC75';
-
-		if (href.contains("bass")) return '#2B4C20, #4F9C35';
-
-		return '#CBA610, #D4BD5E';
-	}
+    return '#CBA610, #D4BD5E';
+  }
 }
 
 class Sample {
+  SingleAudioContext _context = new SingleAudioContext();
+  StreamController _loadedController = new StreamController.broadcast();
 
-	SingleAudioContext _context = new SingleAudioContext();
-	StreamController _loadedController = new StreamController.broadcast();
+  String _fileName;
 
-	String _fileName;
+  AudioBuffer _buffer;
 
-	AudioBuffer _buffer;
+  bool get loaded => _buffer != null;
 
-	bool get loaded => _buffer != null;
+  static Map<String, Sample> _cache;
 
-	static Map<String, Sample> _cache;
+  factory Sample(String fileName) {
+    if (_cache == null) _cache = {};
 
-	factory Sample(String fileName) {
+    if (_cache.containsKey(fileName)) return _cache[fileName];
 
-		if (_cache == null) _cache = {};
+    final sample = new Sample._internal(fileName);
+    _cache[fileName] = sample;
 
-		if (_cache.containsKey(fileName)) return _cache[fileName];
+    return sample;
+  }
 
-		final sample = new Sample._internal(fileName);
-		_cache[fileName] = sample;
+  Sample._internal(this._fileName) {
+    _load();
+  }
 
-		return sample;
-	}
+  void _load() {
+    new HttpRequest()
+      ..open('GET', _fileName, async: true)
+      ..responseType = 'arraybuffer'
+      ..onLoad.listen(_onLoadSuccess)
+      ..onError.listen(_onLoadError)
+      ..send();
+  }
 
-	Sample._internal(this._fileName) {
-		_load();
-	}
+  void _onLoadSuccess(Event e) {
+    _context.decodeAudioData((e.target as HttpRequest).response).then((AudioBuffer buffer) {
+      if (buffer == null) {
+        print("Error decoding file data: $_fileName");
+        return;
+      }
 
-	void _load() {
+      print(_fileName + " - " + buffer.duration.toString());
+      _buffer = buffer;
 
-		new HttpRequest()
-			..open('GET', _fileName, async: true)
-			..responseType = 'arraybuffer'
-			..onLoad.listen(_onLoadSuccess)
-			..onError.listen(_onLoadError)
-			..send();
-	}
+      _loadedController.add("loaded");
+    }).catchError((error) => print("Error: $error"));
+  }
 
-	void _onLoadSuccess(Event e) {
+  void _onLoadError(Event e) => print("BufferLoader: XHR error");
 
-		_context.decodeAudioData((e.target as HttpRequest).response).then(
-				(AudioBuffer buffer) {
+  void play([num startTime, num offset]) {
+    if (startTime == null) startTime = 0.0;
+    if (offset == null) offset = 0.0;
 
-				if (buffer == null) {
-					print("Error decoding file data: $_fileName");
-					return;
-				}
+    if (_buffer == null) {
+      _loadedController.stream.listen((_) {
+        _play(startTime, offset);
+      });
+    } else _play(startTime, offset);
+  }
 
-				print(_fileName + " - " + buffer.duration.toString());
-				_buffer = buffer;
-
-				_loadedController.add("loaded");
-			}).catchError((error) => print("Error: $error"));
-	}
-
-	void _onLoadError(Event e) => print("BufferLoader: XHR error");
-
-	void play([num startTime, num offset]) {
-
-		if (startTime == null) startTime = 0.0;
-		if (offset == null) offset = 0.0;
-
-		if (_buffer == null) {
-			_loadedController.stream.listen((_) {
-				_play(startTime, offset);
-			});
-		}
-		else _play(startTime, offset);
-	}
-
-	void _play(num startTime, num offset) => _context.playFromBuffer(_buffer, startTime, offset);
+  void _play(num startTime, num offset) => _context.playFromBuffer(_buffer, startTime, offset);
 }

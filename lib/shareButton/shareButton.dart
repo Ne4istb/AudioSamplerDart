@@ -1,23 +1,17 @@
 library shareButton;
 
-import 'package:angular/angular.dart';
+import 'package:angular2/core.dart';
 import 'dart:html';
 
 @Component(
 	selector: 'share',
 	templateUrl: 'share-button.html',
-	cssUrl: 'shareButton.css',
-	useShadowDom: false)
+	styleUrls: const['shareButton.css'])
 class ShareButtonComponent {
 
-	@NgAttr('href')
-	String href;
-
-	@NgAttr('icon')
-	String icon;
-
-	@NgAttr('alt')
-	String alt;
+	@Input() String href;
+  @Input() String icon;
+  @Input() String alt;
 
 	String get url => href.replaceFirst("SHARE_URL", Uri.encodeComponent(window.location.href));
 
