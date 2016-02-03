@@ -8,6 +8,7 @@ import 'package:audioSampler/samples/samples.dart';
 import 'package:audioSampler/sample/sample.dart';
 import 'package:audioSampler/audioTrack.dart';
 import 'package:audioSampler/filters/timerFilter.dart';
+import 'package:audioSampler/shareButton/shareButton.dart';
 
 //import 'trackLine/trackLine.dart';
 //import 'sample/sample.dart';
@@ -24,7 +25,7 @@ import 'dart:convert' show JSON;
 
 @Component(selector: 'audio-sampler',
   templateUrl: 'sampler.html',
-  directives: const[TrackLineComponent],
+  directives: const[TrackLineComponent, NgFor, ShareButtonComponent],
   pipes: const[TimerFilter],
   styleUrls: const ['sampler.css'])
 class AudioSamplerComponent {

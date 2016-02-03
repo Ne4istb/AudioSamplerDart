@@ -1,12 +1,13 @@
 library trackLine;
 
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 import 'dart:html';
 import 'dart:convert' show JSON;
 
 @Component(
 	selector: 'track-line',
 	templateUrl: 'track-line.html',
+  directives: const[NgFor],
 	styleUrls: const['trackLine.css'])
 class TrackLineComponent {
 
