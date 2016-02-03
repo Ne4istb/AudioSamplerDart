@@ -1,12 +1,13 @@
 library sampler;
 
-import 'package:angular2/core.dart';
+import 'package:angular2/angular2.dart';
 
 import 'package:audioSampler/audioTrackService.dart';
 import 'package:audioSampler/trackLine/trackLine.dart';
 import 'package:audioSampler/samples/samples.dart';
 import 'package:audioSampler/sample/sample.dart';
 import 'package:audioSampler/audioTrack.dart';
+import 'package:audioSampler/filters/timerFilter.dart';
 
 //import 'trackLine/trackLine.dart';
 //import 'sample/sample.dart';
@@ -21,10 +22,10 @@ import 'dart:math' as math;
 import 'dart:html' as html;
 import 'dart:convert' show JSON;
 
-@Component(
-  selector: 'audio-sampler',
+@Component(selector: 'audio-sampler',
   templateUrl: 'sampler.html',
   directives: const[TrackLineComponent],
+  pipes: const[TimerFilter],
   styleUrls: const ['sampler.css'])
 class AudioSamplerComponent {
   final String CLIENT_ID = 'clientId';

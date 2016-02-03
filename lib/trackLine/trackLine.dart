@@ -5,10 +5,12 @@ import 'dart:html';
 import 'dart:convert' show JSON;
 
 @Component(
-	selector: 'track',
+	selector: 'track-line',
 	templateUrl: 'track-line.html',
 	styleUrls: const['trackLine.css'])
 class TrackLineComponent {
+
+  get nums => [1,2,3,5];
 
 	Scope scope;
 

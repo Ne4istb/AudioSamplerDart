@@ -23,7 +23,7 @@
             <div class="progressCursor" [style]="cursorStyle" [ngClass]="{'progress-cursor-playing': isPlaying}"></div>
 
             <div (click)="setStartPosition($event)">
-                <track *ngFor="#trackLine of trackLines" [number]="$index + 1" [(cells)]="trackLine"></track>
+                <track-line *ngFor="#trackLine of trackLines, #i=index" [number]="i + 1" [(cells)]="trackLine"></track-line>
             </div>
         </div>
 
