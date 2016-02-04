@@ -3,7 +3,7 @@
       draggable="true"
       (dragstart)="drag($event)"
       (dragend)="dragEnd($event)"
-      (doubleclick)="playSample()"
+      (dblclick)="playSample()"
       (contextmenu)="onContextMenu($event)"
       style="background: linear-gradient(to top, {{getColors()}});">
       {{name}}

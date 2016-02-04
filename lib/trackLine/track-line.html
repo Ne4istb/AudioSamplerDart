@@ -2,14 +2,14 @@
     <div class="label">{{label}}</div>
     <div class="workspace" >
         <div *ngFor="#cell of cells, #i=index">
-          <div class="cell" (dragover)="allowDrop($event)" (drop)="drop($event, $index)">
+          <div class="cells[i]" (dragover)="allowDrop($event)" (drop)="drop($event, $index)">
             <sample class="sample-in-track"
                     [id]="number+i"
                     ngIf="cell!=null"
                     [name]="cell.sampleName"
                     [href]="cell.href"
-                    onItemDragged="onItemDragged($index)"
-                    onRightClick="removeSample($index)"></sample>
+                    (onItemDragged)="onItemDragged($index)"
+                    (onRightClick)="removeSample($index)"></sample>
           </div>
 
         </div>
