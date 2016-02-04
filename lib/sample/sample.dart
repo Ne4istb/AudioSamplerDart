@@ -10,6 +10,7 @@ import 'package:audioSampler/singleAudioContext.dart';
 @Component(selector: 'sample', templateUrl: 'sample.html', styleUrls: const ['sample.css'])
 class SampleComponent {
   String id;
+
   @Input() String name;
   @Input() String href;
 

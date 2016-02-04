@@ -10,10 +10,8 @@ import 'package:audioSampler/audioTrackService.dart';
 import 'package:audioSampler/shareButton/shareButton.dart';
 import 'package:audioSampler/filters/timerFilter.dart';
 
-@Component(selector: 'my-app', template: '<h1>My First Angular 2 App</h1>')
-class AppComponent {}
 main() {
-  bootstrap(AppComponent, [TimerFilter, SampleComponent, AudioSamplerComponent,
+  bootstrap(AudioSamplerComponent, [TimerFilter, SampleComponent,
     TrackLineComponent, AudioTrackService, ShareButtonComponent]);
 }
 

@@ -23,7 +23,8 @@
             <div class="progressCursor" [style]="cursorStyle" [ngClass]="{'progress-cursor-playing': isPlaying}"></div>
 
             <div (click)="setStartPosition($event)">
-                <track-line *ngFor="#trackLine of trackLines, #i=index" [number]="i + 1" [cells]="trackLine"></track-line>
+                <track-line *ngFor="#trackLine of trackLines, #i=index" [number]="i+1"
+                            [(cells)]="trackLines[i]"></track-line>
             </div>
         </div>
 
@@ -68,7 +69,7 @@
             <span>Ne4istb 2014</span>
             <div class="social-group" data-step="11" data-position="top" data-intro="When you saved your track share it with friends!">
                 <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="icon-google-plus"></share>
-                <share alt="Share on Facebook" href]="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="icon-facebook"></share>
+                <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="icon-facebook"></share>
                 <share alt="Share on Twitter" href="https://twitter.com/share?url=SHARE_URL" icon="icon-twitter"></share>
                 <share alt="Share on Vkontakte" href="http://vk.com/share.php?url=SHARE_URL" icon="icon-vk"></share>
             </div>

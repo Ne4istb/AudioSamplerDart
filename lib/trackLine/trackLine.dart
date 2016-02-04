@@ -5,79 +5,70 @@ import 'dart:html';
 import 'dart:convert' show JSON;
 
 @Component(
-	selector: 'track-line',
-	templateUrl: 'track-line.html',
-  directives: const[NgFor],
-	styleUrls: const['trackLine.css'])
+    selector: 'track-line',
+    templateUrl: 'track-line.html',
+    directives: const [NgFor],
+    styleUrls: const ['trackLine.css'])
 class TrackLineComponent {
 
-  get nums => [1,2,3,5];
+  @Input() int number;
 
-	Scope scope;
+  String get label => "Track $number";
 
-	@Input() String number;
+  List<TrackLineCell> cells;
 
-	String get label => "Track " + number;
+  TrackLineComponent();
 
-	@Input()
-	List<TrackLineCell> cells;
+  bool _clearCellAllowed = false;
 
-	TrackLineComponent();
+  void drop(MouseEvent e, int index) {
+    if (cells[index] != null) return;
 
-	bool _clearCellAllowed = false;
+    String id = e.dataTransfer.getData('Id');
+    if (id != (e.currentTarget as Element).id) _clearCellAllowed = true;
 
-	void drop(MouseEvent e, int index) {
+    String sampleName = e.dataTransfer.getData('SampleName');
+    String sampleHref = e.dataTransfer.getData('SampleHref');
 
-		if (cells[index] != null) return;
+    cells[index] = new TrackLineCell(sampleName, sampleHref);
 
-		String id = e.dataTransfer.getData('Id');
-		if (id != (e.currentTarget as Element).id) _clearCellAllowed = true;
+    //scope.emit('sampleAdded', [index, sampleHref]);
+  }
 
-		String sampleName = e.dataTransfer.getData('SampleName');
-		String sampleHref = e.dataTransfer.getData('SampleHref');
+  bool _ctrlPressed;
 
-		cells[index] = new TrackLineCell(sampleName, sampleHref);
+  void allowDrop(MouseEvent e) {
+    _ctrlPressed = e.ctrlKey;
+    e.preventDefault();
+  }
 
-		//scope.emit('sampleAdded', [index, sampleHref]);
-	}
+  void onItemDragged(int index) {
+    if (!_ctrlPressed && _clearCellAllowed) removeSample(index);
 
-	bool _ctrlPressed;
+    _ctrlPressed = false;
+    _clearCellAllowed = false;
+  }
 
-	void allowDrop(MouseEvent e) {
-		_ctrlPressed = e.ctrlKey;
-		e.preventDefault();
-	}
-
-	void onItemDragged(int index) {
-
-		if (!_ctrlPressed && _clearCellAllowed) removeSample(index);
-
-		_ctrlPressed = false;
-		_clearCellAllowed = false;
-	}
-
-	void removeSample(int index) {
-
+  void removeSample(int index) {
 //		scope.emit('sampleRemoved', [index, cells[index].href]);
 
-		cells[index] = null;
-	}
+    cells[index] = null;
+  }
 }
 
 class TrackLineCell {
+  String sampleName;
+  String href;
 
-	String sampleName;
-	String href;
+  TrackLineCell(this.sampleName, this.href);
 
-	TrackLineCell(this.sampleName, this.href);
+  TrackLineCell.fromJSON(String jsonString) {
+    Map storedTrackLine = JSON.decode(jsonString);
+    sampleName = storedTrackLine['n'] == "null" ? '' : storedTrackLine['n'];
+    href = storedTrackLine['h'] == "null" ? '' : storedTrackLine['h'];
+  }
 
-	TrackLineCell.fromJSON(String jsonString) {
-		Map storedTrackLine = JSON.decode(jsonString);
-		sampleName = storedTrackLine['n'] == "null" ? '' : storedTrackLine['n'];
-		href = storedTrackLine['h'] == "null" ? '' : storedTrackLine['h'];
-	}
-
-	String toJson() {
-		return '{ "n": "$sampleName", "h": "$href" } ';
-	}
+  String toJson() {
+    return '{ "n": "$sampleName", "h": "$href" } ';
+  }
 }

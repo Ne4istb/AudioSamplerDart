@@ -10,14 +10,6 @@ import 'package:audioSampler/audioTrack.dart';
 import 'package:audioSampler/filters/timerFilter.dart';
 import 'package:audioSampler/shareButton/shareButton.dart';
 
-//import 'trackLine/trackLine.dart';
-//import 'sample/sample.dart';
-//import 'shareButton/shareButton.dart';
-//import 'samples/samples.dart';
-//
-//import 'audioTrackService.dart';
-//import 'audioTrack.dart';
-
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:html' as html;
@@ -25,8 +17,9 @@ import 'dart:convert' show JSON;
 
 @Component(selector: 'audio-sampler',
   templateUrl: 'sampler.html',
-  directives: const[TrackLineComponent, NgFor, ShareButtonComponent],
+  directives: const[TrackLineComponent, NgFor, ShareButtonComponent, SampleComponent],
   pipes: const[TimerFilter],
+  providers: const[AudioTrackService],
   styleUrls: const ['sampler.css'])
 class AudioSamplerComponent {
   final String CLIENT_ID = 'clientId';
@@ -37,7 +30,7 @@ class AudioSamplerComponent {
   static int TRACK_LINE_WIDTH = 1065;
   static num TRACK_LENGTH = 79.5;
 
-  var samples = new SamplesLib().list;
+  List<SampleItem> get samples => new SamplesLib().list;
 
   List<List<TrackLineCell>> trackLines = [];
 
@@ -46,6 +39,7 @@ class AudioSamplerComponent {
   String _trackOwner;
 
   AudioSamplerComponent(this._audioTrackService) {
+
     _id = _getClientId();
     _initTrackLines();
 
