@@ -1,10 +1,10 @@
 <div  class="sample"
-      id="{{id}}"
+      [id]="id"
       draggable="true"
       (dragstart)="drag($event)"
       (dragend)="dragEnd($event)"
       (dblclick)="playSample()"
       (contextmenu)="onContextMenu($event)"
-      style="background: linear-gradient(to top, {{getColors()}});">
+      [style.background]="background">
       {{name}}
 </div>

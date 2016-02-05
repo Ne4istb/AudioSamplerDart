@@ -58,8 +58,8 @@
         </div>
 
         <div class="samplesContainer clearfix" data-position="top" data-step="3" data-intro="Here you can select samples for your track. Double click on any to listen it.">
-            <div *ngFor="#sample of samples" class="samples-bank">
-                <sample [name]="sample.name" [href]="sample.href"></sample>
+            <div  class="samples-bank">
+                <sample *ngFor="#sample of samples, #i=index" [name]="sample.name" [href]="sample.href"></sample>
             </div>
         </div>
     </div>
