@@ -6,7 +6,7 @@
 }
 
 .label{   
-    background: #000 url("../images/carbon_bg.png") repeat-x;
+    background: #000 url("images/carbon_bg.png") repeat-x;
     float:left;
     height: 30px;
     border-right: 2px solid #000;

@@ -7,8 +7,10 @@ import 'package:audioSampler/trackLine/trackLine.dart';
 import 'package:audioSampler/samples/samples.dart';
 import 'package:audioSampler/sample/sample.dart';
 import 'package:audioSampler/audioTrack.dart';
-import 'package:audioSampler/filters/timerFilter.dart';
+import 'package:audioSampler/pipes/timer-pipe.dart';
+import 'package:audioSampler/pipes/bank-category-pipe.dart';
 import 'package:audioSampler/shareButton/shareButton.dart';
+import 'package:audioSampler/models/sample.dart';
 
 import 'dart:async';
 import 'dart:math' as math;
@@ -17,8 +19,8 @@ import 'dart:convert' show JSON;
 
 @Component(selector: 'audio-sampler',
   templateUrl: 'sampler.html',
-  directives: const[TrackLineComponent, NgFor, ShareButtonComponent, SampleComponent],
-  pipes: const[TimerFilter],
+  directives: const[TrackLineComponent, NgFor, NgIf, ShareButtonComponent, SampleComponent],
+  pipes: const[TimerPipe, BankCategoryPipe],
   providers: const[AudioTrackService],
   styleUrls: const ['sampler.css'])
 class AudioSamplerComponent {
@@ -46,10 +48,10 @@ class AudioSamplerComponent {
     html.window.onKeyDown.listen(onKeyPress);
   }
 
-  void set scope(Scope scope) {
+//  void set scope(Scope scope) {
 //		scope.on('sampleAdded').listen(onSampleAdded);
 //		scope.on('sampleRemoved').listen(onSampleRemoved);
-  }
+//  }
 
   String _getClientId() {
     String id = html.window.localStorage[CLIENT_ID];

@@ -29,8 +29,7 @@ class SampleComponent {
   }
 
   void onContextMenu(Event e) {
-    print('before emit');
-    onRightClick.emit('done');
+    onRightClick.emit(e);
     e.preventDefault();
   }
 

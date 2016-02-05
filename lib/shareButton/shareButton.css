@@ -2,7 +2,7 @@
   display: inline-block;  
   border: none;
   background-color: transparent;
-  background-image: url("../images/sprite.png");
+  background-image: url("images/sprite.png");
   background-repeat: no-repeat;
   background-size: 770% 100%;
   cursor: pointer;  

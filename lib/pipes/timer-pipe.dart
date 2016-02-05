@@ -1,10 +1,10 @@
-library timer_filter;
+library audio_sampler.timer_pipe;
 
 import 'package:angular2/core.dart';
 import 'package:intl/intl.dart';
 
-@Pipe(name: 'timerFilter')
-class TimerFilter extends PipeTransform {
+@Pipe(name: 'timerPipe')
+class TimerPipe extends PipeTransform {
   @override
   transform(value, List args) {
 

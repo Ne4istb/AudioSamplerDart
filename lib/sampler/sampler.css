@@ -18,7 +18,7 @@
 }
 
 .audioSampler{
-  background:  #000 url("../images/bg.jpg");
+  background:  #000 url("images/bg.jpg");
   height: 100%;
 }
 
@@ -125,7 +125,7 @@
 }
 
 .btn-bank {
-  background: #000 url("../images/carbon_bg.png") repeat-x;
+  background: #000 url("images/carbon_bg.png") repeat-x;
   border-color: transparent transparent transparent #fff;
   border-style: solid;
   border-width: 1px;
@@ -149,7 +149,7 @@
 
 .footer,
 .header {
-  background: #000 url("../images/carbon_bg.png") repeat-x;
+  background: #000 url("images/carbon_bg.png") repeat-x;
 }
 
 .footer {
@@ -170,7 +170,7 @@
   display: inline-block;  
   border: none;
   background-color: transparent;
-  background-image: url("../images/sprite.png");
+  background-image: url("images/sprite.png");
   background-repeat: no-repeat;
   background-position-y: 0;
   background-size: 770% 100%;

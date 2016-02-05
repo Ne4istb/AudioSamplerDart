@@ -44,7 +44,7 @@
             </div>
 
             <div class="timer">
-                {{time | timerFilter}}
+                {{time | timerPipe}}
             </div>
 
         </div>
@@ -52,21 +52,21 @@
         <div class="sound-banks" data-step="2" data-intro="It is sound bank, where you can select samples for your track. Select tab by category" data-position='top'>
             <button class="btn-bank"
                     *ngFor="#bank of bankCategories"
-                    (click)="currentBankCategory = bank">
+                    (click)="currentBankCategory=bank">
                 {{bank}}
             </button>
         </div>
 
         <div class="samplesContainer clearfix" data-position="top" data-step="3" data-intro="Here you can select samples for your track. Double click on any to listen it.">
             <div  class="samples-bank">
-                <sample *ngFor="#sample of samples, #i=index" [name]="sample.name" [href]="sample.href"></sample>
+                <sample *ngFor="#sample of samples | bankCategoryPipe:currentBankCategory" [name]="sample.name" [href]="sample.href"></sample>
             </div>
         </div>
     </div>
 
     <div class="footer">
         <div class=container>
-            <span>Ne4istb 2014</span>
+            <span>Ne4istb 2014-2016</span>
             <div class="social-group" data-step="11" data-position="top" data-intro="When you saved your track share it with friends!">
                 <share alt="Share on Google+" href="https://plus.google.com/share?url=SHARE_URL" icon="icon-google-plus"></share>
                 <share alt="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=SHARE_URL" icon="icon-facebook"></share>
