@@ -18,13 +18,15 @@ class SampleComponent {
   @Output() EventEmitter onItemDragged = new EventEmitter();
   @Output() EventEmitter onRightClick = new EventEmitter();
 
-  void drag(MouseEvent e) {
+  void onDragStart(MouseEvent e) {
+    print('onDragStart');
     e.dataTransfer.setData('id', (e.currentTarget as Element).id);
     e.dataTransfer.setData('SampleName', name);
     e.dataTransfer.setData('SampleHref', href);
   }
 
-  void dragEnd(MouseEvent e) {
+  void onDragEnd(MouseEvent e) {
+    print('dragend');
     onItemDragged.emit(e);
   }
 

@@ -7,7 +7,7 @@ import 'dart:convert' show JSON;
 @Component(
     selector: 'track-line',
     templateUrl: 'track-line.html',
-    directives: const [NgFor],
+    directives: const [NgFor, NgIf],
     styleUrls: const ['trackLine.css'])
 class TrackLineComponent {
 
@@ -15,13 +15,16 @@ class TrackLineComponent {
 
   String get label => "Track $number";
 
-  List<TrackLineCell> cells;
+  @Input() List<TrackLineCell> cells;
 
   TrackLineComponent();
 
   bool _clearCellAllowed = false;
 
+  String getId(i) => 'sample_${number}_$i';
+
   void drop(MouseEvent e, int index) {
+    print('drop');
     if (cells[index] != null) return;
 
     String id = e.dataTransfer.getData('Id');
@@ -43,6 +46,7 @@ class TrackLineComponent {
   }
 
   void onItemDragged(int index) {
+    print('drag');
     if (!_ctrlPressed && _clearCellAllowed) removeSample(index);
 
     _ctrlPressed = false;

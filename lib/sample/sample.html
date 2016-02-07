@@ -1,8 +1,8 @@
 <div  class="sample"
       [id]="id"
       draggable="true"
-      (dragstart)="drag($event)"
-      (dragend)="dragEnd($event)"
+      (dragstart)="onDragStart($event)"
+      (dragend)="onDragEnd($event)"
       (dblclick)="playSample()"
       (contextmenu)="onContextMenu($event)"
       [style.background]="background">

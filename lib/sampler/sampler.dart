@@ -19,7 +19,7 @@ import 'dart:convert' show JSON;
 
 @Component(selector: 'audio-sampler',
   templateUrl: 'sampler.html',
-  directives: const[TrackLineComponent, NgFor, NgIf, ShareButtonComponent, SampleComponent],
+  directives: const[TrackLineComponent, NgFor, ShareButtonComponent, SampleComponent],
   pipes: const[TimerPipe, BankCategoryPipe],
   providers: const[AudioTrackService],
   styleUrls: const ['sampler.css'])
